@@ -911,7 +911,7 @@ The application is not build as recommended together with its dependencies, as e
                         "&source=de" +
                         "&target=" + language +
                         // referrer protected googlwe api key - get a test key for developing
-                        "key=" + googleApiKey;
+                        "&key=" + googleApiKey;
                         document.getElementById("loadIcon").style.display = "block";
                 var xhttpLegal = new XMLHttpRequest();
                 xhttpLegal.onreadystatechange = function () {
@@ -968,7 +968,7 @@ The application is not build as recommended together with its dependencies, as e
                         "&source=de" +
                         "&target=" + language +
                         // referrer protected key - get a test key for developing
-                        "key=" + googleApiKey;
+                        "&key=" + googleApiKey;
                 var xhttpLegal2 = new XMLHttpRequest();
                 document.getElementById("loadIcon").style.display = "block";
                 xhttpLegal2.onreadystatechange = function () {
@@ -1040,7 +1040,7 @@ The application is not build as recommended together with its dependencies, as e
                         "&source=de" +
                         "&target=" + language +
                         // referrer protected google api key - get a test key for developing
-                        "key=" + googleApiKey;
+                        "&key=" + googleApiKey;
                 var xhttphelp = new XMLHttpRequest();
                 document.getElementById("loadIcon").style.display = "block";
                 xhttphelp.onreadystatechange = function () {
@@ -1367,7 +1367,7 @@ The application is not build as recommended together with its dependencies, as e
                         "&q=" + window.solidaryCityMapLegend.en.initiative +
                         "&source=en" +
                         "&target=" + language +
-                        "key=" + googleApiKey;
+                        "&key=" + googleApiKey;
                 var xhttp = new XMLHttpRequest();
                 document.getElementById("loadIcon").style.display = "block";
                 xhttp.onreadystatechange = function () {

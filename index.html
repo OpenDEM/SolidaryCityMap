@@ -1,0 +1,1418 @@
+<!doctype html>
+<!--
+www.opendem.info
+based on Openlayers: https://openlayers.org/
+License: BSD 2-Clause License
+https://tldrlegal.com/license/bsd-2-clause-license-(freebsd)
+The application is not build as recommended together with its dependencies, as explained in the Building an OpenLayers Application tutorial of OpenLayers!
+-->
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="description" content="SolidaryCityMap: On this website you will find places where you can participate in the life in the city without papers and / or money.">
+        <meta name="keywords" content="SolidaryCity,Map,Solidarity,City,no papers,no money,Sanctuary Cities">
+        <meta name="author" content="OpenDEM.info">
+        <link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/images/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/images/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/images/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/images/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/images/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/images/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="/images/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+        <link rel="manifest" href="/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+        <link rel="stylesheet" href="css/ol.css" type="text/css">
+        <script src="js/translation_help.js" async></script>
+        <script src="js/translation_legal.js" async></script>
+        <script src="js/translation_legend.js" async></script>
+        <style>
+            .map {
+                height: 80%;
+                width: 97%;
+            }
+            a:visited {color: cyan;}
+            ​a:link {color: cyan;}
+            a{ color : cyan}
+            .ol-attribution > ul > li > a{color: black;}
+            .info {width: 100%;}
+            .modal3 {
+                padding: 20px;
+                display: none;
+                height: 100%;
+                left: 0;
+                position: fixed;
+                top: 0;
+                width: 100%;
+                background-color: black;
+                color: white;
+            }
+            .modal3.open {
+                display: grid;
+                grid-template-rows: 100px auto 100px;
+            }
+            .modal3_content {
+                overflow-y: auto;
+            }
+            .bigradio{
+                min-height:20px;
+                min-width:20px;
+            }
+            .modal_header{
+                height: 40px;
+            }
+            .modal_header_fi{
+                height: 0px;}
+            .modal_footer{
+                position: absolute;
+                bottom: 70px;
+                right: 100px;
+            }   
+            html{
+                font-size: 16px;   
+                font-family: "helvetica neue", helvetica, arial, sans-serif;
+                background-color: black;
+                height: 100%;
+                width: 100%;
+                fill: white;
+            }
+            figcaption{
+                float: right;
+            }
+            body{
+                height: 100%;
+                width: 100%;
+            }
+            h1{
+                font-size: 16px;
+            }
+            h2{
+                font-size: 1.5rem;
+                font-family: "helvetica neue", helvetica, arial, sans-serif;
+            }
+            p{
+                font-size: 1rem;
+            }
+            .head{
+                color: white;  
+            }
+            .closeInfo{
+                right: 50px; 
+                top: 15px;
+                position:absolute;
+                filter: invert(100%);
+            }
+            .languageIcon{
+                position: relative;
+                top: -10px;
+            }
+            .title{
+                float: left;
+                top: -20px;
+                position: relative;
+            }
+            .help_img{
+                float: left;
+                margin-right: 10px;
+            }
+            #selectLang{
+                height: calc(100% - 200px);;
+                overflow: auto;
+                position: absolute;
+            }
+            .ol-control button {
+                background-color: black!important;
+            }
+            .layerSwitcher{
+                top: 0.5em;
+                right: 0.5em;
+            }      
+            .tracker{
+                top: 3.9em;
+                right: 0.5em;
+            }    
+            .modal_content{
+                margin-right: 30px;
+                overflow: auto;
+                height: calc(100% - 140px);
+            }  
+            .modal_content_fi{
+                margin-right: 30px;
+                overflow: auto;
+                height: calc(100% - 100px);
+            }  
+            .post-container{
+                overflow: auto;
+                margin: 5px;
+            }
+            .post-thumb {
+                float: left
+            }
+            .post-thumb img {
+                display: block
+            }
+            .post-content {
+                margin-left: 210px
+            }
+            .loadIcon{
+                width:64px;
+                height:64px;
+                left: 15px; 
+                bottom: 15px;
+                position:absolute;
+                z-index: 990;
+                display: none;
+            }
+        </style>
+        <script src="js/ol.js"></script>
+        <title>SolidaryCityMap</title>
+    </head>
+    <body>
+        // header
+        <div id="head" class="head">
+            <h2 class="title">SolidaryCityMap&nbsp</h2>
+            <img class="languageIcon" src="images/language.jpg" onclick="languageToggler()" alt="Choose Language" height="45" width="45">
+            <img class="languageIcon" src="images/help.png" onclick="help()" alt="Help, About and Data" height="45" width="45">
+            <img class="languageIcon" src="images/legal.png" onclick="legal()" alt="Legal Notes" height="45" width="45">
+        </div> 
+        //map
+        <div id="map" class="map"></div> 
+        <div id="info" class="info">&nbsp;</div>
+        <div id="finfo" class="modal3"><br/>
+            <div  id="finfoHeader" class="modal_header_fi">
+                <img onclick="closeInfo()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
+            </div>
+            <div id="finfoContentAll" class="modal_content_fi">
+                <div  id="finfoHeaderText" class="modal_headerText"></div>
+                <div id="finfoUrls" >urls</div>
+                <div id="finfoPhone"><p>PHONE: <a href="tel:+1-303-499-7111">Phone +1 (303) 499-7111</a></p></div>
+                <div id="finfoMails">MAILS: </div>
+                <div id="finfoAdress">ADRESS: </div>
+                <div id="finfoContent"></div>
+                <div id="finfoFooter" class="modal_footer">Translated by Google</div>
+            </div>
+        </div>
+        // language toggler
+        <div id="languageToggler" class="modal3">
+            <div  id="languageTogglerHeader" class="modal_header"><div  id="languageTogglerText" class="modal_headerText">Choose your Language</div>
+                <img onclick="closeLanguage()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
+            </div>
+            <div id="selectLang" class="modal_content">
+            </div>
+            <div id="languageTogglerFooter" class="modal_footer">Translated by Google</div>
+        </div>
+        // help
+        <div id="help" class="modal3">
+            <div  id="helpHeader" class="modal_header"><div  id="helpText" class="modal_headerText">Help, About and Data</div>
+                <img onclick="closeHelp()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
+            </div>
+            <div id="selectHelp" class="modal_content">
+                <h2 id="help_headline">Hilfe, Über und Daten</h2>
+
+                <p id="help_about_text_1"> Keine Papiere, kein Geld?</p>
+                <p id="help_about_text_2">Auf dieser Webseite findest Du Orte, an denen Du auch ohne Papiere und/oder Geld an dem Leben in der Stadt teilhaben kannst.</p>
+                <p id="help_about_text_3">Falls hier Orte fehlen, nicht mehr aktuell sind, oder Du dieses Projekt auf andere Weise unterstützen möchtest, kontaktiere uns bitte:</p>
+                <a href="mailto:contact@opendemdata.info">Email</a>
+                <p id="help_about_text_3_1">Mittels einer Editor Version der Anwendung können registrierte Nutzerinnen und Nutzer selbst Orte hinzufügen, bearbeiten und löschen.</p>
+                <p id="help_about_text_3_2">Die Anwendung ist bisher nur für Mobilgeräte optimiert.</p>
+                <p id="help_about_text_3_3">Mittels von HTML Parametern kann der initiale Standort beim Aufruf definiert werden (Beispiel Berlin, Deutschland).</p>
+                <a href="https://solidary.city?xcoord=52.520008&ycoord=13.404954&zoom=11">https://solidary.city?xcoord=52.520008&ycoord=13.404954&zoom=11</a> 
+                <ul>
+                    <li>xcoord = Latitude </li>
+                    <li>ycoord = Longitude </li>
+                    <li>zoom = Zoom Level </li>
+                </ul>
+                <h3 id="help_help_headline">Hilfe</h3>	
+                <div class="post-container">                
+                    <div class="post-thumb"><img src="images/clickOnMap.png" alt="Click in the map to get detailed information" /></div>
+                    <div class="post-content"><p id="help_help_text1">Klicke auf ein beliebiges Icon in der Karte um detaillierte Informationen zum Ort abfragen zu können.</p></div>   
+                </div>
+                <div class="post-container">                
+                    <div class="post-thumb"><img src="images/clickLayers.png" alt="Click on the Layer menue to change the layers" /></div>
+                    <div class="post-content"><p id="help_help_text2">Klicke auf das Kartenebenen Icon um gezielt Kartenebenen auszuwählen.</p></div>   
+                </div>
+                <div class="post-container">                
+                    <div class="post-thumb"><img src="images/location.png" alt="Show your location" /></div>
+                    <div class="post-content"><p id="help_help_text3">Standort anzeigen</p></div>   
+                </div>
+                <div class="post-container">                
+                    <div class="post-thumb"><img src="images/help_language.png" alt="Help for Language Toggler" /></div>
+                    <div class="post-content"><p id="help_help_text4">Auswahl der Sprache</p></div>   
+                </div>
+                <div class="post-container">                
+                    <div class="post-thumb"><img src="images/help_help.png" alt="Help" /></div>
+                    <div class="post-content"><p id="help_help_text5">Hilfe, Über und Daten</p></div>   
+                </div>
+                <div class="post-container">                
+                    <div class="post-thumb"><img src="images/help_legal.png" alt="Help Legal Notes" /></div>
+                    <div class="post-content"><p id="help_help_text6">Rechtliche Hinweise</p></div>   
+                </div>
+                <p id="help_help_text7">Es wird automatisch die voreingestellte Sprache des Browser ermittelt und verwendet. Die Sprache kann über das Icon "Auswahl der Sprache" aber auch noch im nachhinein angepasst werden.</p>
+                <h3 id="help_data_headline">Daten</h3>	
+                <p id="help_help_text8">Die Daten stehen analog zu OSM unter der Open Database License (ODbL). Die Daten können hier als GeoJSON herunter geladen werden: </p>
+
+                <p> <a target="_blank" href="https://solidary.city/downloads/solidarycity.zip">DOWNLOAD</a><i> Attributation: SolidaryCityMap Contributors</i></p>
+                <p> <a target="_blank" href="https://solidary.city/geoserver/solidary/wms?SERVICE=WMS&REQUEST=getCapabilities">Web Mapping Service (WMS)</a><i> Attributation: SolidaryCityMap Contributors</i></p>
+                <p id="help_help_text9">Es wird versucht alle Orte auch in OSM einzutragen, ob dies schon geschehen ist kannst Du in der Spalte "OSM" erkennen.</p>	
+                <p id="help_help_text10">Die Übersetzungen mit der Google Translation API kosten Geld. 1 Millionen Zeichen kosten 20 Dollar. Mit Deiner Spende können wir die Kosten gemeinsam tragen. Sie Spende ist leider nicht steuerlich absetzbar.</p>	
+                <a class="dbox-donation-button" target="_blank" href="https://donorbox.org/solidary-city" style="background:#2d81c5 url(images/red_logo.png) no-repeat 37px center; color: #fff;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 16px;padding: 15px 38px 15px 75px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; box-shadow: 0 1px 0 0 #1f5a89; text-shadow: 0 1px rgba(0, 0, 0, 0.3);" >Donate</a>
+                <p><a href="https://github.com/OpenDEM/SolidaryCityMap">
+                        <img src="images/GitHub-Mark-64px.png" alt="GitHub" style="width:64px;height:64px;border:0;"> Code on GitHub
+                    </a></p>
+            </div>
+            <div id="helpFooter" class="modal_footer">Translated by Google</div>
+        </div>
+        // legal notices
+        <div id="legal" class="modal3">
+            <div  id="legalHeader" class="modal_header">
+                <div  id="legalText" class="modal_headerText">Legal Notes</div>
+                <img onclick="closeLegal()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
+            </div>
+            <div id="selectLegal" class="modal_content">
+                <h2 id="legal_headline">Rechtliche Hinweise</h2>
+                <h3 id="impress">Impressum</h3>
+                <p id="impress_text">Verantwortlich für diesen Webauftritt ist: Martin Over, Rüdesheimer Str. 33, 50679 Köln, contact(at)OpenDEMData.info</p>
+                <h3 id="disclaimer">Haftungsausschluss</h3>
+                <h4 id="legal_disclaimer_content">Haftung für Inhalte</h4>
+                <p id="legal_disclaimer_content_text">Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach § 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p>
+                <h4 id="legal_disclaimer_content_links">Haftung für Links</h4>
+                <p id="legal_disclaimer_content_links_text">Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte</p>
+                <h4 id="legal_author">Urheberrecht</h4>
+                <p id="legal_author_text">Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Sie sind mit einer Creative Commons Lizenz urheberrechtlich geschützt. Sofern nicht anders angegeben, stehen die Inhalte dieser Seite unter der Creative Commons Namensnennung 3.0 DE Lizenz. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.</p>
+                <h3 id="data_privacy_statement">Datenschutzerklärung</h3>	
+                <h4 id="data_privacy_statement_text1">Bereitstellung der Website und Erstellung von Protokoll- oder Log-Dateien</h4>
+                <h4 id="data_privacy_statement_text2">Welche Daten werden verarbeitet?</h4>
+                <p id="data_privacy_statement_text3">Bei jedem Zugriff auf Inhalte des Internetangebotes werden dort vorübergehend Daten über sogenannte Protokoll- oder Log-Dateien gespeichert, die möglicherweise eine Identifizierung zulassen. Die folgenden Daten werden hierbei erhoben:</p>
+                <ul>
+                    <li id="data_privacy_statement_li1">Datum und Uhrzeit des Abrufs</li>
+                    <li id="data_privacy_statement_li3">Name des aufgerufenen Internetdienstes, der aufgerufenen Ressource und der verwendeten Aktion</li>
+                    <li id="data_privacy_statement_li4">Abfrage, die der Client gestellt hat</li>
+                    <li id="data_privacy_statement_li5">übertragene Datenmenge</li>
+                    <li id="data_privacy_statement_li6">IP-Adresse des aufrufenden Rechners</li>
+                    <li id="data_privacy_statement_li7">Clientinformationen (u.a. Browser, Betriebssystem)</li></ul>
+                <h4 id="data_privacy_statement_text4">Auf welcher Rechtsgrundlage werden diese Daten verarbeitet?</h4>
+                <p id="data_privacy_statement_text5">Rechtsgrundlage für die vorübergehende Speicherung der Daten ist Art. 6 Abs. 1 lit. e DS-GVO i.V.m. § 3 Abs. 1 NRWDSAnpUG-EU.</p>
+                <h4 id="data_privacy_statement_text6">Zu welchen Zwecken erfolgt die Verarbeitung?</h4>
+                <p id="data_privacy_statement_text7">Die Daten aus den Protokoll- bzw. Logdateien dienen zur Sicherstellung der Funktionsfähigkeit der Website. Zudem dienen sie zur Abwehr und Analyse von Angriffen. In diesen Zwecken liegt auch unser berechtigtes Interesse an der Datenverarbeitung.</p>
+                <h4 id="data_privacy_statement_text8">Wie lange werden die Daten gespeichert?</h4>
+                <p id="data_privacy_statement_text9">Die Daten werden bis zu einer Woche direkt und ausschließlich für Administratoren zugänglich aufbewahrt. Mit dem Hoster des Serverswurde ein entsprechender Vertrag zur Auftragsverarbeitung (AVV) geschlossen. Es handelt sich um einen deutschen Serverstandort</p>
+                <h4 id="data_privacy_statement_text10">Karten</h4>
+                <p id="data_privacy_statement_text11">Die hier gezeigten Hintergrundkarten kommen von:</p>
+                <a href="https://www.openstreetmap.org">www.openstreetmap.org</a>
+                <h4 id="data_privacy_statement_text12">Icons</h4>
+                <p id="data_privacy_statement_text13">Das preisgekörnte Übersetzungs Icon wurde erstellt von:</p>
+                <a href="http://www.languageicon.org">www.languageicon.org</a>
+                <p id="data_privacy_statement_text14">Die Icons für die Karte wurden erstellt von:</p>
+                <a href="https://mapicons.mapsmarker.com">www.mapicons.mapsmarker.com</a>
+                <h4 id="data_privacy_statement_text15">Automatische Übersetzungen</h4>
+                <p id="data_privacy_statement_text16">Die automatische Übersetzung wird durch die Google LLC Cloud Translation API realisiert. 
+                    Dafür ist die Verarbeitung der IP-Adresse durch Google LLC. zwingend erforderlich. 
+                    Google LLC. ist Privacy Shield zertifiziert. Die Zusammenarbeit mit Google LLC in datenschutzrechtlicher Hinsicht erfolgt auf der Grundlage eines abgeschlossenen Vertrags über die gemeinsame Verantwortlichkeit nach Art. 26 DSGVO, abrufbar unter:</p>
+                <p><a href="https://privacy.google.com/intl/de/businesses/compliance/#?modal_active=none">Google Businesses Compliance</a></p>
+                <p id="data_privacy_statement_text17">Im Übrigen tritt der Nutzer durch die Nutzung der Cloud Translation API unmittelbar mit Google in ein Nutzungsverhältnis.</p>
+            </div>
+            <div id="legalFooter" class="modal_footer">Translated by Google</div>
+        </div>
+        // legend toggler
+        <div id="legendToggler" class="modal3">
+            <div  id="legendTogglerHeader" class="modal_header"><div  id="finfoHeaderText" class="modal_headerText"><h2>Legend & Selection</h2></div>
+                <img onclick="closeLegend()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
+            </div>
+            <div id="selectLang" class="modal_content">
+                <p id="legendAndSwitcher">Legend and Selection</p>	 
+                <div id="allLayers">
+                    <input type="radio" class="bigradio" name="legendRadio" value="all" onclick="changeLayer(this)">All Layers
+                </div>
+                <div id="arts">
+                    <input type="radio" class="bigradio" name="legendRadio" value="arts" onclick="changeLayer(this)">
+                    <img src="images/arts.png" alt="Arts and Culture">Arts and Culture
+                </div>
+                <div id="education">
+                    <input type="radio" class="bigradio" name="legendRadio" value="education" onclick="changeLayer(this)">
+                    <img src="images/education.png" alt="Education">Education
+                </div>
+                <div id="work">
+                    <input type="radio" class="bigradio" name="legendRadio" value="work" onclick="changeLayer(this)">
+                    <img src="images/work.png" alt="Employment Service">Employment Service
+                </div>
+                <div id="food">
+                    <input type="radio" class="bigradio" name="legendRadio" value="food" onclick="changeLayer(this)">
+                    <img src="images/food.png" alt="Food">Food
+                </div>
+                <div id="goods">
+                    <input type="radio" class="bigradio" name="legendRadio" value="goods" onclick="changeLayer(this)">
+                    <img src="images/goods.png" alt="Goods and Services">Goods and Services
+                </div>
+                <div id="it">
+                    <input type="radio" class="bigradio" name="legendRadio" value="it" onclick="changeLayer(this)">
+                    <img src="images/it.png" alt="Information Technology and Media">Information Technology and Media
+                </div>
+
+                <div id="kids">
+                    <input type="radio" class="bigradio" name="legendRadio" value="kids" onclick="changeLayer(this)">
+                    <img src="images/kids.png" alt="Kids">Kids
+                </div>
+                <div id="library">
+                    <input type="radio" class="bigradio" name="legendRadio" value="library" onclick="changeLayer(this)">
+                    <img src="images/library.png" alt="Library">Library
+                </div>
+                <div id="medical">
+                    <input type="radio" class="bigradio" name="legendRadio" value="medical" onclick="changeLayer(this)">
+                    <img src="images/medical.png" alt="Medical Care">Medical Care
+                </div>
+                <div id="multi">
+                    <input type="radio" class="bigradio" name="legendRadio" value="multi" onclick="changeLayer(this)">
+                    <img src="images/multi.png" alt="multiple utilisation">Multiple Utilisation
+                </div>
+                <div id="park">
+                    <input type="radio" class="bigradio" name="legendRadio" value="park" onclick="changeLayer(this)">
+                    <img src="images/park.png" alt="Park">Park
+                </div>
+                <div id="sports">
+                    <input type="radio" class="bigradio" name="legendRadio" value="sports" onclick="changeLayer(this)">
+                    <img src="images/sports.png" alt="Sports">Sports
+                </div>
+                <div id="information">
+                    <input type="radio" class="bigradio" name="legendRadio" value="information" onclick="changeLayer(this)">
+                    <img src="images/information.png" alt="Refugees Advice Center">Refugees Advice Center
+                </div>
+                <div id="initiative">
+                    <input type="radio" class="bigradio" name="legendRadio" value="initiative" onclick="changeLayer(this)">
+                    <img src="images/initiative.png" alt="Initiative">Solidarity City Initiative
+                </div>
+                <div id="women">
+                    <input type="radio" class="bigradio" name="legendRadio" value="women" onclick="changeLayer(this)">
+                    <img src="images/women.png" alt="Women's Advice Center">Women's Advice Center
+                </div>
+                <div id="wlan">
+                    <input type="radio" class="bigradio" name="legendRadio" value="wlan" onclick="changeLayer(this)">
+                    <img src="images/wi-fi.png" alt="WLAN access point">WLAN access point
+                </div>
+                <div id="queer">
+                    <input type="radio" class="bigradio" name="legendRadio" value="queer" onclick="changeLayer(this)">
+                    <img src="images/queer.png" alt="Queer,Lesbian, Gay">Queer,Lesbian, Gay
+                </div>
+                <div id="youth">
+                    <input type="radio" class="bigradio" name="legendRadio" value="youth" onclick="changeLayer(this)">
+                    <img src="images/youth.png" alt="Youth">Youth
+                </div>
+            </div>
+            <div id="legendTogglerFooter" class="modal_footer">Translated by Google</div>
+        </div>
+        // show when google api request limit has been achieved
+        <div id="googleLimit" class="modal3">
+            <div  id="googleLimitHeader" class="modal_header"><div  id="googleLimitHeaderText" class="modal_headerText"><h2>Google Limit achieved</h2></div>
+                <img onclick="closeLimit()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
+            </div>
+            <div class="modal_content">
+                <p>The limit of the Google Translation API requests has been achieve.</p>                    
+                <p> No more translations are possible.</p>	 
+                <p> Costs: 20 Dollar per million (M) characters.</p>	
+                <p>Please donate to share the costs.</p>
+                <p>This donation ist not tax-deductible.</p>
+                <a class="dbox-donation-button" target="_blank" href="https://donorbox.org/solidary-city" style="background:#2d81c5 url(images/red_logo.png) no-repeat 37px center; color: #fff;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 16px;padding: 15px 38px 15px 75px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; box-shadow: 0 1px 0 0 #1f5a89; text-shadow: 0 1px rgba(0, 0, 0, 0.3);" >Donate</a>
+            </div>
+        </div>
+        <div id="loadIcon" class="loadIcon"> <img src="images/ajax-loader-big.gif" alt="Load icon"> </div>
+        <script type="text/javascript">
+            var wmsUrl = "";
+            var servletUrl = "";
+            var googleApiKey = ""
+            if (document.domain === 'localhost') {
+                wmsUrl = "http://localhost:8080";
+                servletUrl = "http://localhost:8081";
+                // getYourOwnKey
+                googleApiKey = "AIzaSyDrWdSgcjLwmSyAu6X38Y9nYLifB1pI0n0";
+            } else {
+                wmsUrl = "https://solidary.city";
+                servletUrl = "https://solidary.city";
+                googleApiKey = "AIzaSyDrWdSgcjLwmSyAu6X38Y9nYLifB1pI0n0";
+            }
+            // e.g. "de-DE"
+            var language = navigator.language;
+            var langSplit = language.split("-");
+            language = langSplit[0];
+            var wmsSource;
+            var fishnet_4000000Source;
+            var fishnet_2000000Source;
+            var fishnet_1000000Source;
+            var fishnet_500000Source;
+            var fishnet_250000Source;
+            var fishnet_125000Source;
+            var fishnet_62500Source;
+            var fishnet_31250Source;
+            var fishnet_15625Source;
+            var fishnet_7812Source;
+            var languageTogglerFilled = false;
+            var legendLanguageLast = "";
+            var helpLanguageLast = "";
+            var legalLanguageLast = "";
+            var googleLimit = false;
+// legend switcher openlayers control
+            window.app = {};
+            var app = window.app;
+            app.LayerSwitcher = function (opt_options) {
+                var options = opt_options || {};
+                var button = document.createElement('button');
+                button.innerHTML = '<img src="images/layers.png">';
+                button.setAttribute("style", "width: 45px; height:45px;");
+                var this_ = this;
+                var layerSwitcher = function () {
+                    // do not translate when original language, or already translated
+                    if (legendLanguageLast === language || language === 'en') {
+                    } else if (window.solidaryCityMapLegend.translations.indexOf(language) > -1 && legendLanguageLast !== language) {
+                        legendLanguageLast = language;
+                        humanTranslateLegend();
+                    } else {
+                        legendLanguageLast = language;
+                        googleTranslateLegend();
+                    }
+                    document.getElementById("legendToggler").style.display = "block";
+                };
+                button.addEventListener('click', layerSwitcher, false);
+                var element = document.createElement('div');
+                element.className = 'ol-unselectable ol-control layerSwitcher';
+                element.appendChild(button);
+                ol.control.Control.call(this, {
+                    element: element,
+                    target: options.target
+                });
+            };
+            ol.inherits(app.LayerSwitcher, ol.control.Control);
+            // tracker control
+            app.Tracker = function (opt_options) {
+                var options = opt_options || {};
+                var button = document.createElement('button');
+                button.innerHTML = '<img src="images/locate.png">';
+                button.setAttribute("style", "width: 45px; height:45px;");
+                var this_ = this;
+                var tracker = function () {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(showPosition);
+                        function showPosition(position) {
+                            this_.getMap().getView().setCenter(ol.proj.transform([position.coords.longitude, position.coords.latitude], 'EPSG:4326', 'EPSG:3857'))
+                            var self = this;
+                            var lat = position.coords.latitude;
+                            var long = position.coords.longitude;
+                            if (self.dinamicPinLayer !== undefined) {
+                                self.iconGeometry.setCoordinates(ol.proj.transform([position.coords.longitude, position.coords.latitude], 'EPSG:4326', 'EPSG:3857'));
+                            } else {
+                                self.iconGeometry = new ol.geom.Point(ol.proj.transform([position.coords.longitude, position.coords.latitude], 'EPSG:4326', 'EPSG:3857'));
+                                var iconFeature = new ol.Feature({
+                                    geometry: self.iconGeometry,
+                                    name: 'marker'
+                                });
+                                var iconStyle = new ol.style.Style({
+                                    image: new ol.style.Icon(({
+                                        anchor: [0.5, 46],
+                                        anchorXUnits: 'fraction',
+                                        anchorYUnits: 'pixels',
+                                        size: [48, 48],
+                                        opacity: 1,
+                                        src: 'icon.png'
+                                    }))
+                                });
+                                iconFeature.setStyle(iconStyle);
+                                var vectorSource = new ol.source.Vector({
+                                    features: [iconFeature]
+                                });
+                                self.dinamicPinLayer = new ol.layer.Vector({
+                                    source: vectorSource
+                                });
+                                map.addLayer(self.dinamicPinLayer);
+                            }
+                        }
+
+                    } else {
+                        alert("Geolocation is not supported by this browser.");
+                    }
+                };
+                button.addEventListener('click', tracker, false);
+                var element = document.createElement('div');
+                element.className = 'ol-unselectable ol-control tracker';
+                element.appendChild(button);
+                ol.control.Control.call(this, {
+                    element: element,
+                    target: options.target
+                });
+
+            };
+            ol.inherits(app.Tracker, ol.control.Control);
+// layers
+            var osm = new ol.layer.Tile({
+                source: new ol.source.OSM()
+            });
+            fishnet_4000000Source = new ol.source.ImageWMS({
+                url: wmsUrl + '/geoserver/solidary/wms',
+                params: {'LAYERS': 'solidary:fishnet_4000000'
+                },
+                ratio: 1,
+                serverType: 'geoserver',
+                attributions: ', SolidaryCityMap contributors'
+            });
+            var fishnet_4000000 = new ol.layer.Image({
+                source: fishnet_4000000Source,
+                minResolution: 150000
+            });
+            fishnet_2000000Source = new ol.source.ImageWMS({
+                url: wmsUrl + '/geoserver/solidary/wms',
+                params: {'LAYERS': 'solidary:fishnet_2000000'
+                },
+                ratio: 1,
+                serverType: 'geoserver',
+                attributions: ', SolidaryCityMap contributors'
+            });
+            var fishnet_2000000 = new ol.layer.Image({
+                source: fishnet_2000000Source,
+                maxResolution: 80000,
+                minResolution: 78000
+            });
+            fishnet_1000000Source = new ol.source.ImageWMS({
+                url: wmsUrl + '/geoserver/solidary/wms',
+                params: {'LAYERS': 'solidary:fishnet_1000000'
+                },
+                ratio: 1,
+                serverType: 'geoserver',
+                attributions: ', SolidaryCityMap contributors'
+            });
+            var fishnet_1000000 = new ol.layer.Image({
+                source: fishnet_1000000Source,
+                maxResolution: 40000,
+                minResolution: 39000
+            });
+            fishnet_500000Source = new ol.source.ImageWMS({
+                url: wmsUrl + '/geoserver/solidary/wms',
+                params: {'LAYERS': 'solidary:fishnet_500000'
+                },
+                ratio: 1,
+                serverType: 'geoserver',
+                attributions: ', SolidaryCityMap contributors'
+            });
+            var fishnet_500000 = new ol.layer.Image({
+                source: fishnet_500000Source,
+                maxResolution: 20000,
+                minResolution: 19000
+            });
+            fishnet_250000Source = new ol.source.ImageWMS({
+                url: wmsUrl + '/geoserver/solidary/wms',
+                params: {'LAYERS': 'solidary:fishnet_250000'
+                },
+                ratio: 1,
+                serverType: 'geoserver',
+                attributions: ', SolidaryCityMap contributors'
+            });
+            var fishnet_250000 = new ol.layer.Image({
+                source: fishnet_250000Source,
+                maxResolution: 10000,
+                minResolution: 9000
+            });
+            fishnet_125000Source = new ol.source.ImageWMS({
+                url: wmsUrl + '/geoserver/solidary/wms',
+                params: {'LAYERS': 'solidary:fishnet_125000'
+                },
+                ratio: 1,
+                serverType: 'geoserver',
+                attributions: ', SolidaryCityMap contributors'
+            });
+            var fishnet_125000 = new ol.layer.Image({
+                source: fishnet_125000Source,
+                maxResolution: 5000,
+                minResolution: 4000
+            });
+            fishnet_62500Source = new ol.source.ImageWMS({
+                url: wmsUrl + '/geoserver/solidary/wms',
+                params: {'LAYERS': 'solidary:fishnet_62500'
+                },
+                ratio: 1,
+                serverType: 'geoserver',
+                attributions: ', SolidaryCityMap contributors'
+            });
+            var fishnet_62500 = new ol.layer.Image({
+                source: fishnet_62500Source,
+                maxResolution: 3000,
+                minResolution: 2000
+            });
+            fishnet_31250Source = new ol.source.ImageWMS({
+                url: wmsUrl + '/geoserver/solidary/wms',
+                params: {'LAYERS': 'solidary:fishnet_31250'
+                },
+                ratio: 1,
+                serverType: 'geoserver',
+                attributions: ', SolidaryCityMap contributors'
+            });
+            var fishnet_31250 = new ol.layer.Image({
+                source: fishnet_31250Source,
+                maxResolution: 1500,
+                minResolution: 1000
+            });
+            fishnet_15625Source = new ol.source.ImageWMS({
+                url: wmsUrl + '/geoserver/solidary/wms',
+                params: {'LAYERS': 'solidary:fishnet_15625'
+                },
+                ratio: 1,
+                serverType: 'geoserver',
+                attributions: ', SolidaryCityMap contributors'
+            });
+            var fishnet_15625 = new ol.layer.Image({
+                source: fishnet_15625Source,
+                maxResolution: 700,
+                minResolution: 600
+
+            });
+            fishnet_7812Source = new ol.source.ImageWMS({
+                url: wmsUrl + '/geoserver/solidary/wms',
+                params: {'LAYERS': 'solidary:fishnet_7812'
+                },
+                ratio: 1,
+                serverType: 'geoserver',
+                attributions: ', SolidaryCityMap contributors'
+            });
+            var fishnet_7812 = new ol.layer.Image({
+                source: fishnet_7812Source,
+                maxResolution: 350,
+                minResolution: 60
+            });
+            wmsSource = new ol.source.ImageWMS({
+                url: wmsUrl + '/geoserver/solidary/wms',
+                params: {'LAYERS': 'solidary:solidary_4326,solidary:osm_library,solidary:osm_wlan,solidary:osm_park'
+                },
+                ratio: 1,
+                serverType: 'geoserver',
+                attributions: ', SolidaryCityMap contributors'
+            });           
+                 wmsSource.on('imageloaderror', function() {
+        alert('Ups, something went wrong. The MapService is yet not available.');
+      });
+            
+            var wms = new ol.layer.Image({
+                source: wmsSource,
+                maxResolution: 60
+            });
+
+            // url parameter coordinates
+            var ycoord = 6.9619;
+            var xcoord = 50.9389;
+            var zoomView = 12;
+            try {
+                if (getUrlVars()["xcoord"] != undefined) {
+                    xcoord = parseFloat(getUrlVars()["xcoord"]);
+                }
+            } catch (e) {
+            }
+            try {
+                if (getUrlVars()["ycoord"] != undefined) {
+                    ycoord = parseFloat(getUrlVars()["ycoord"]);
+                }
+            } catch (e) {
+            }
+            try {
+                if (getUrlVars()["zoomView"] != undefined) {
+                    zoomView = Number(getUrlVars()["zoomView"]);
+                }
+            } catch (e) {
+            }
+// openlayers view and map
+            var view = new ol.View({
+                center: ol.proj.fromLonLat([ycoord, xcoord]),
+                zoom: zoomView
+            });
+            var map = new ol.Map({
+                controls: ol.control.defaults({
+                    attributionOptions: {
+                        collapsible: true
+                    }
+                }).extend([
+                    new app.LayerSwitcher(),
+                    new app.Tracker()
+                ]),
+                target: 'map',
+                layers: [osm, fishnet_4000000, fishnet_2000000, fishnet_1000000, fishnet_500000, fishnet_250000, fishnet_125000, fishnet_62500, fishnet_31250, fishnet_15625, fishnet_7812, wms],
+                view: view
+            });
+
+            // FeatureInfo
+            map.on('singleclick', function (evt) {
+                var viewResolution = /** @type {number} */ (view.getResolution());
+                var url = wmsSource.getGetFeatureInfoUrl(
+                        evt.coordinate, viewResolution, 'EPSG:3857',
+                        {'INFO_FORMAT': 'text/html'});
+                if (url) {
+                     document.getElementById("loadIcon").style.display = "block";
+                    url = url.replace("text%2Fhtml", "application%2Fjson");
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            document.getElementById("loadIcon").style.display = "none";
+                            var jsonRes = JSON.parse(this.responseText);
+                            if (jsonRes.features.length > 0) {
+                                var text = jsonRes.features[0].properties.text;
+                                var name = jsonRes.features[0].properties.name;
+                                var url = jsonRes.features[0].properties.urls;
+                                var lang = jsonRes.features[0].properties.language;
+                                var phone = jsonRes.features[0].properties.phone;
+                                var adress = jsonRes.features[0].properties.adress;
+                                var mails = jsonRes.features[0].properties.mails;
+                                var translation = "";
+                                if (jsonRes.features[0].properties.transla != null) {
+                                    translation = jsonRes.features[0].properties.transla;
+                                }
+                                var uuid = jsonRes.features[0].properties.uuid;
+                                document.getElementById("finfoContent").innerHTML = '<p>' + text + '</p>';
+                                document.getElementById("finfoHeaderText").innerHTML = '<h2>' + name + '</h2>';
+                                try {
+                                    var urlSplit = url.split(',');
+                                    if (urlSplit.length == 2) {
+                                        document.getElementById("finfoUrls").innerHTML = '<p>LINKS: <a target="_blank" href="' + urlSplit[0] + '">' + urlSplit[0] + '</a><br/><a target="_blank" href="' + urlSplit[1] + '">' + urlSplit[1] + '</a></p>';
+                                    } else if (urlSplit.length == 2) {
+                                        document.getElementById("finfoUrls").innerHTML = '<p>LINKS: <a target="_blank" href="' + urlSplit[0] + '">' + urlSplit[0] + '</a><br/><a target="_blank" href="' + urlSplit[1] + '">' + urlSplit[1] + '</a><a target="_blank" href="' + urlSplit[2] + '">' + urlSplit[2] + '</a></p>';
+                                    } else {
+                                        document.getElementById("finfoUrls").innerHTML = '<p>LINKS: <a target="_blank" href="' + url + '">' + url + '</a></p>';
+                                    }
+                                } catch (e) {
+                                }
+                                // phone
+                                try {
+                                    var phoneSplit = phone.split(',');
+                                    if (phoneSplit.length == 2) {
+                                        document.getElementById("finfoPhone").innerHTML = '<p>PHONE: <a target="_blank" href="' + phoneSplit[0] + '">' + phoneSplit[0] + '</a><br/><a target="_blank" href="' + phoneSplit[1] + '">' + phoneSplit[1] + '</a></p>';
+                                    } else if (phoneSplit.length == 2) {
+                                        document.getElementById("finfoPhone").innerHTML = '<p>PHONE: <a target="_blank" href="' + phoneSplit[0] + '">' + phoneSplit[0] + '</a><br/><a target="_blank" href="' + phoneSplit[1] + '">' + phoneSplit[1] + '</a><a target="_blank" href="' + phoneSplit[2] + '">' + phoneSplit[2] + '</a></p>';
+                                    } else {
+                                        document.getElementById("finfoPhone").innerHTML = '<p>PHONE: <a target="_blank" href="' + phone + '">' + phone + '</a></p>';
+                                    }
+                                } catch (e) {
+                                }
+                                try {
+                                    var mailsSplit = mails.split(',');
+                                    if (mailsSplit.length == 2) {
+                                        document.getElementById("finfoMails").innerHTML = '<p>MAIL: <a target="_blank" href="' + mailsSplit[0] + '">' + mailsSplit[0] + '</a><br/><a target="_blank" href="' + mailsSplit[1] + '">' + mailsSplit[1] + '</a></p>';
+                                    } else if (mailsSplit.length == 2) {
+                                        document.getElementById("finfoMails").innerHTML = '<p>MAIL: <a target="_blank" href="' + mailsSplit[0] + '">' + mailsSplit[0] + '</a><br/><a target="_blank" href="' + mailsSplit[1] + '">' + mailsSplit[1] + '</a><a target="_blank" href="' + mailsSplit[2] + '">' + mailsSplit[2] + '</a></p>';
+                                    } else {
+                                        document.getElementById("finfoMails").innerHTML = '<p>MAIL: <a target="_blank" href="' + mails + '">' + mails + '</a></p>';
+                                    }
+                                } catch (e) {
+                                }
+                                document.getElementById("finfoAdress").innerHTML = '<p>ADRESS: ' + adress + '</p>';
+                                if (language.toLowerCase() !== lang) {
+                                    // check for human translation first
+                                    var translaA;
+                                    var humTrans = false;
+                                    if (translation.length > 0) {
+                                        translaA = translation.split(",");
+
+                                        for (var x = 0; x < translaA.length; x++) {
+                                            if (translaA[x] === language) {
+                                                humTrans = true;
+                                            }
+                                        }
+                                    }
+                                    if (humTrans === true) {
+                                        var jsonReq = {"language": language, "uuid": uuid};
+                                        xhr = new XMLHttpRequest();
+                                        var url = servletUrl + "/Solidary_City/Translation?language=" + language + "&uuid=" + uuid;
+                                        xhr.open("GET", url, true);
+                                        xhr.onerror = function () {
+                                            alert("Ups, something was going wrong. No access to translations.");
+                                        };
+
+                                        xhr.setRequestHeader("Content-type", "application/json");
+                                        xhr.onreadystatechange = function () {
+                                            if (xhr.readyState == 4 && xhr.status == 200) {
+                                                var json = JSON.parse(xhr.responseText);
+                                                console.log(json)
+                                                if(json.translation){
+                                                document.getElementById("finfoContent").innerHTML = json.translation;
+                                                document.getElementById("finfo").style.display = "block";
+                                            } else {
+                                                 alert("Ups, something was going wrong. No access to translations.");
+                                            }
+                                            }
+                                        }
+                                        var data = JSON.stringify(jsonReq);
+                                        xhr.send();
+                                    } else {
+                                        url = "https://translation.googleapis.com/language/translate/v2?" +
+                                                "q=" + text +
+                                                "&q=" + name +
+                                                "&source=" + lang +
+                                                "&target=" + language + "&" +
+                                                // referrer protected google api key
+                                                "key=" + googleApiKey;
+                                        var xhttp = new XMLHttpRequest();
+                                        xhttp.onreadystatechange = function () {
+                                            if (this.readyState == 4 && this.status == 200) {
+                                                var jsonR = JSON.parse(xhttp.responseText);
+                                                document.getElementById("finfoContent").innerHTML = jsonR.data.translations[0].translatedText;
+                                                document.getElementById("finfo").style.display = "block";
+                                            } else if (this.readyState == 4 && this.status == 403) {
+                                                var jsonR = JSON.parse(xhttp.responseText);
+                                                document.getElementById("finfo").style.display = "block";
+                                                if (googleLimit === false) {
+                                                    document.getElementById("googleLimit").style.display = "block";
+                                                    googleLimit = true;
+                                                }
+                                            }
+                                        };
+                                        xhttp.open("GET", url, true);
+                                        xhttp.onerror = function () {
+                                            alert("Ups, something was going wrong. No access to translations.");
+                                        };
+                                        xhttp.send();
+                                    }
+                                } else {
+                                    document.getElementById("finfoContent").innerHTML = text;
+                                    document.getElementById("finfo").style.display = "block";
+                                }
+                            }
+                        }
+                    };
+                    xhttp.open("GET", url, true);
+                    xhttp.onerror = function () {
+                        document.getElementById("loadIcon").style.display = "none";
+                                            alert("Ups, something was going wrong. No access to FeatureInfo.");
+                                        };
+                    xhttp.send();
+                }
+            });
+            // end featureinfo
+
+            // event handling language changed
+            var sel = document.getElementById('selectLang');
+            sel.onchange = function () {
+                var lang = this.value;
+                lang = lang.split("-");
+                var langOk = lang[1];
+                langOk = langOk.trim();
+            }
+            // event handling language changed end 
+            // google translate legal
+            function googleTranslateLegal() {
+                url_legal = "https://translation.googleapis.com/language/translate/v2?" +
+                        "&q=" + window.solidaryCityMapLegal.de.legal_headline +
+                        "&q=" + window.solidaryCityMapLegal.de.impress +
+                        "&q=" + window.solidaryCityMapLegal.de.impress_text +
+                        "&q=" + window.solidaryCityMapLegal.de.disclaimer +
+                        "&q=" + window.solidaryCityMapLegal.de.legal_disclaimer_content +
+                        "&q=" + window.solidaryCityMapLegal.de.legal_disclaimer_content_text +
+                        "&q=" + window.solidaryCityMapLegal.de.legal_disclaimer_content_links +
+                        "&q=" + window.solidaryCityMapLegal.de.legal_disclaimer_content_links_text +
+                        "&q=" + window.solidaryCityMapLegal.de.legal_author +
+                        "&q=" + window.solidaryCityMapLegal.de.legal_author_text +
+                        "&source=de" +
+                        "&target=" + language +
+                        // referrer protected googlwe api key - get a test key for developing
+                        "key=" + googleApiKey;
+                        document.getElementById("loadIcon").style.display = "block";
+                var xhttpLegal = new XMLHttpRequest();
+                xhttpLegal.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("loadIcon").style.display = "none";
+                        var jsonR = JSON.parse(xhttpLegal.responseText);
+                        document.getElementById("legal_headline").innerHTML = jsonR.data.translations[0].translatedText;
+                        document.getElementById("impress").innerHTML = jsonR.data.translations[1].translatedText;
+                        document.getElementById("impress_text").innerHTML = jsonR.data.translations[2].translatedText;
+                        document.getElementById("disclaimer").innerHTML = jsonR.data.translations[3].translatedText;
+                        document.getElementById("legal_disclaimer_content").innerHTML = jsonR.data.translations[4].translatedText;
+                        document.getElementById("legal_disclaimer_content_text").innerHTML = jsonR.data.translations[5].translatedText;
+                        document.getElementById("legal_disclaimer_content_links").innerHTML = jsonR.data.translations[6].translatedText;
+                        document.getElementById("legal_disclaimer_content_links_text").innerHTML = jsonR.data.translations[7].translatedText;
+                        document.getElementById("legal_author").innerHTML = jsonR.data.translations[8].translatedText;
+                        document.getElementById("legal_author_text").innerHTML = jsonR.data.translations[9].translatedText;
+                    }
+                };
+                xhttpLegal.open("POST", url_legal, true);
+                xhttpLegal.onerror = function () {
+                    document.getElementById("loadIcon").style.display = "none";
+                                            alert("Ups, something was going wrong");
+                                        };
+                xhttpLegal.send();
+                // google translate for help end
+                // translate for legal notes and about 2. parts because more than 4000 chars are blockt
+                var htmlEle = document.getElementById('selectLegal').innerHTML;
+                htmlEle = htmlEle.replace(/(\r\n\t|\n|\r\t)/gm, "");
+                url_legal = "https://translation.googleapis.com/language/translate/v2?" +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text1 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text2 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text3 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_li1 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_li3 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_li4 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_li5 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_li6 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_li7 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text4 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text5 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text6 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text7 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text8 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text9 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text10 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text11 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text12 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text13 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text14 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text15 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text16 +
+                        "&q=" + window.solidaryCityMapLegal.de.data_privacy_statement_text17 +
+                        "&source=de" +
+                        "&target=" + language +
+                        // referrer protected key - get a test key for developing
+                        "key=" + googleApiKey;
+                var xhttpLegal2 = new XMLHttpRequest();
+                document.getElementById("loadIcon").style.display = "block";
+                xhttpLegal2.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("loadIcon").style.display = "none";
+                        var jsonR = JSON.parse(xhttpLegal2.responseText);
+                        document.getElementById("data_privacy_statement").innerHTML = jsonR.data.translations[0].translatedText;
+                        document.getElementById("data_privacy_statement_text1").innerHTML = jsonR.data.translations[1].translatedText;
+                        document.getElementById("data_privacy_statement_text2").innerHTML = jsonR.data.translations[2].translatedText;
+                        document.getElementById("data_privacy_statement_text3").innerHTML = jsonR.data.translations[3].translatedText;
+                        document.getElementById("data_privacy_statement_li1").innerHTML = jsonR.data.translations[4].translatedText;
+                        document.getElementById("data_privacy_statement_li3").innerHTML = jsonR.data.translations[5].translatedText;
+                        document.getElementById("data_privacy_statement_li4").innerHTML = jsonR.data.translations[6].translatedText;
+                        document.getElementById("data_privacy_statement_li5").innerHTML = jsonR.data.translations[7].translatedText;
+                        document.getElementById("data_privacy_statement_li6").innerHTML = jsonR.data.translations[8].translatedText;
+                        document.getElementById("data_privacy_statement_li7").innerHTML = jsonR.data.translations[9].translatedText;
+                        document.getElementById("data_privacy_statement_text4").innerHTML = jsonR.data.translations[10].translatedText;
+                        document.getElementById("data_privacy_statement_text5").innerHTML = jsonR.data.translations[11].translatedText;
+                        document.getElementById("data_privacy_statement_text6").innerHTML = jsonR.data.translations[12].translatedText;
+                        document.getElementById("data_privacy_statement_text7").innerHTML = jsonR.data.translations[13].translatedText;
+                        document.getElementById("data_privacy_statement_text8").innerHTML = jsonR.data.translations[14].translatedText;
+                        document.getElementById("data_privacy_statement_text9").innerHTML = jsonR.data.translations[15].translatedText;
+                        document.getElementById("data_privacy_statement_text10").innerHTML = jsonR.data.translations[16].translatedText;
+                        document.getElementById("data_privacy_statement_text11").innerHTML = jsonR.data.translations[17].translatedText;
+                        document.getElementById("data_privacy_statement_text12").innerHTML = jsonR.data.translations[18].translatedText;
+                        document.getElementById("data_privacy_statement_text13").innerHTML = jsonR.data.translations[19].translatedText;
+                        document.getElementById("data_privacy_statement_text14").innerHTML = jsonR.data.translations[20].translatedText;
+                        document.getElementById("data_privacy_statement_text15").innerHTML = jsonR.data.translations[21].translatedText;
+                        document.getElementById("data_privacy_statement_text16").innerHTML = jsonR.data.translations[22].translatedText;
+                        document.getElementById("data_privacy_statement_text17").innerHTML = jsonR.data.translations[23].translatedText;
+                    }
+                    if (this.readyState == 4 && this.status == 403) {
+                        document.getElementById("loadIcon").style.display = "none";
+                        if (googleLimit === false) {
+                            document.getElementById("googleLimit").style.display = "block";
+                            googleLimit = true;
+                        }
+                    }
+                };
+                xhttpLegal2.open("POST", url_legal, true);
+                xhttpLegal2.onerror = function () {
+                    document.getElementById("loadIcon").style.display = "none";
+                                            alert("Ups, something was going wrong");
+                                        };
+                xhttpLegal2.send();
+            }
+            // google translate legal end
+            // help translate request
+            function googleTranslateHelp() {
+                url_help = "https://translation.googleapis.com/language/translate/v2?" +
+                        "&q=" + window.solidaryCityMapHelp.de.help_headline +
+                        "&q=" + window.solidaryCityMapHelp.de.help_about_text_1 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_about_text_2 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_about_text_3 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_about_text_3_1 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_headline +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_text1 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_text2 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_text3 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_text4 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_text5 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_text6 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_text7 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_text8 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_text9 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_text10 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_about_text_3_2 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_about_text_3_3 +
+                        "&source=de" +
+                        "&target=" + language +
+                        // referrer protected google api key - get a test key for developing
+                        "key=" + googleApiKey;
+                var xhttphelp = new XMLHttpRequest();
+                document.getElementById("loadIcon").style.display = "block";
+                xhttphelp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("loadIcon").style.display = "none";
+                        var jsonR = JSON.parse(xhttphelp.responseText);
+                        document.getElementById("help_headline").innerHTML = jsonR.data.translations[0].translatedText;
+                        document.getElementById("help_about_text_1").innerHTML = jsonR.data.translations[1].translatedText;
+                        document.getElementById("help_about_text_2").innerHTML = jsonR.data.translations[2].translatedText;
+                        document.getElementById("help_about_text_3").innerHTML = jsonR.data.translations[3].translatedText;
+                        document.getElementById("help_about_text_3_1").innerHTML = jsonR.data.translations[4].translatedText;
+                        document.getElementById("help_help_headline").innerHTML = jsonR.data.translations[5].translatedText;
+                        document.getElementById("help_help_text1").innerHTML = jsonR.data.translations[6].translatedText;
+                        document.getElementById("help_help_text2").innerHTML = jsonR.data.translations[7].translatedText;
+                        document.getElementById("help_help_text3").innerHTML = jsonR.data.translations[8].translatedText;
+                        document.getElementById("help_help_text4").innerHTML = jsonR.data.translations[9].translatedText;
+                        document.getElementById("help_help_text5").innerHTML = jsonR.data.translations[10].translatedText;
+                        document.getElementById("help_help_text6").innerHTML = jsonR.data.translations[11].translatedText;
+                        document.getElementById("help_help_text7").innerHTML = jsonR.data.translations[12].translatedText;
+                        document.getElementById("help_help_text8").innerHTML = jsonR.data.translations[13].translatedText;
+                        document.getElementById("help_help_text9").innerHTML = jsonR.data.translations[14].translatedText;
+                        document.getElementById("help_help_text10").innerHTML = jsonR.data.translations[15].translatedText;
+                        document.getElementById("help_about_text_3_2").innerHTML = jsonR.data.translations[16].translatedText;
+                        document.getElementById("help_about_text_3_3").innerHTML = jsonR.data.translations[17].translatedText;
+                    }
+                    if (this.readyState == 4 && this.status == 403) {
+                        document.getElementById("loadIcon").style.display = "none";
+                        if (googleLimit === false) {
+                            document.getElementById("googleLimit").style.display = "block";
+                            googleLimit = true;
+                        }
+                    }
+                };
+                xhttphelp.open("GET", url_help, true);
+                xhttphelp.onerror = function () {
+                    document.getElementById("loadIcon").style.display = "none";
+                                            alert("Ups, something was going wrong");
+                                        };
+                xhttphelp.send();
+            }
+            // help translate request end
+
+            // human translations legend
+            function humanTranslateLegend() {
+                document.getElementById("arts").lastChild.data = window.solidaryCityMapLegend[language].arts;
+                document.getElementById("food").lastChild.data = window.solidaryCityMapLegend[language].food;
+                document.getElementById("medical").lastChild.data = window.solidaryCityMapLegend[language].medical;
+                document.getElementById("women").lastChild.data = window.solidaryCityMapLegend[language].women;
+                document.getElementById("information").lastChild.data = window.solidaryCityMapLegend[language].information;
+                document.getElementById("legendAndSwitcher").innerHTML = window.solidaryCityMapLegend[language].legendAndSwitcher;
+                document.getElementById("allLayers").lastChild.data = window.solidaryCityMapLegend[language].allLayers;
+                document.getElementById("education").lastChild.data = window.solidaryCityMapLegend[language].education;
+                document.getElementById("goods").lastChild.data = window.solidaryCityMapLegend[language].goods;
+                document.getElementById("it").lastChild.data = window.solidaryCityMapLegend[language].it;
+                document.getElementById("kids").lastChild.data = window.solidaryCityMapLegend[language].kids;
+                document.getElementById("sports").lastChild.data = window.solidaryCityMapLegend[language].sports;
+                document.getElementById("queer").lastChild.data = window.solidaryCityMapLegend[language].queer;
+                document.getElementById("youth").lastChild.data = window.solidaryCityMapLegend[language].youth;
+                document.getElementById("wlan").lastChild.data = window.solidaryCityMapLegend[language].wlan;
+                document.getElementById("library").lastChild.data = window.solidaryCityMapLegend[language].library;
+                document.getElementById("park").lastChild.data = window.solidaryCityMapLegend[language].park;
+                document.getElementById("multi").lastChild.data = window.solidaryCityMapLegend[language].multi;
+                document.getElementById("work").lastChild.data = window.solidaryCityMapLegend[language].work;
+                document.getElementById("initiative").lastChild.data = window.solidaryCityMapLegend[language].initiative;
+            }
+            // human translations legend
+            function humanTranslateHelp() {
+                for (var key in window.solidaryCityMapHelp[language]) {
+                    if (window.solidaryCityMapHelp[language].hasOwnProperty(key)) {
+                        document.getElementById(key).innerHTML = window.solidaryCityMapHelp[language][key];
+                    }
+                }
+            }
+            // human translations legal
+            function humanTranslateLegal() {
+                for (var key in window.solidaryCityMapLegal[language]) {
+                    if (window.solidaryCityMapLegal[language].hasOwnProperty(key)) {
+                        // console.log(key + " -> " + window.solidaryCityMapHelp[language][key]);
+                        document.getElementById(key).innerHTML = window.solidaryCityMapLegal[language][key];
+                    }
+                }
+            }
+// close FeatureInfo
+            function closeInfo() {
+                document.getElementById("finfo").style.display = "none";
+            }
+            function closeLanguage() {
+                document.getElementById("languageToggler").style.display = "none";
+            }
+            function closeLegend() {
+                document.getElementById("legendToggler").style.display = "none";
+            }
+            function closeLimit() {
+                document.getElementById("googleLimit").style.display = "none";
+            }
+
+            function closeHelp() {
+                document.getElementById("help").style.display = "none";
+            }
+
+            function closeLegal() {
+                document.getElementById("legal").style.display = "none";
+            }
+            function languageToggler() {
+                if (languageTogglerFilled === false) {
+                    fillLanguageToggler();
+                    languageTogglerFilled = true;
+                }
+                document.getElementById("languageToggler").style.display = "block";
+            }
+// open help
+            function help() {
+                if (helpLanguageLast === language || language === 'de') {
+                } else if (window.solidaryCityMapHelp.translations.indexOf(language) > -1 && helpLanguageLast !== language) {
+                    helpLanguageLast = language;
+                    humanTranslateHelp();
+                } else {
+                    helpLanguageLast = language;
+                    googleTranslateHelp();
+                }
+                document.getElementById("help").style.display = "block";
+            }
+// open legal
+            function legal() {
+
+                if (legalLanguageLast === language || language === 'de') {
+                } else if (window.solidaryCityMapLegal.translations.indexOf(language) > -1 && legalLanguageLast !== language) {
+                    legalLanguageLast = language;
+                    humanTranslateLegal();
+                } else {
+                    legalLanguageLast = language;
+                    googleTranslateLegal();
+                }
+                document.getElementById("legal").style.display = "block";
+            }
+// change the layers            
+            function changeLayer(id) {
+                var wmsLayer = "";
+                var style = "";
+                var styleFishnet = "";
+                switch (id.value) {
+                    case 'all':
+                        style = "";
+                        wmsLayer = 'solidary:solidary_4326,solidary:osm_library,solidary:osm_wlan,solidary:osm_park';
+                        break;
+                    case 'food':
+                        style = "solidary:soli_food";
+                        wmsLayer = 'solidary:solidary_4326';
+                        styleFishnet = 'solidary:hexa_food';
+                        break;
+                    case 'medical':
+                        style = "solidary:soli_medical";
+                        wmsLayer = 'solidary:solidary_4326';
+                        styleFishnet = 'solidary:hexa_medical';
+                        break;
+                    case 'arts':
+                        style = "solidary:soli_arts";
+                        wmsLayer = 'solidary:solidary_4326';
+                        styleFishnet = 'solidary:hexa_arts';
+                        break;
+                    case 'information':
+                        style = "solidary:soli_information";
+                        wmsLayer = 'solidary:solidary_4326';
+                        styleFishnet = 'solidary:hexa_information';
+                        break;
+                    case 'women':
+                        style = "solidary:soli_women";
+                        wmsLayer = 'solidary:solidary_4326';
+                        styleFishnet = 'solidary:hexa_women';
+                        break;
+                    case 'goods':
+                        style = "solidary:soli_goods";
+                        wmsLayer = 'solidary:solidary_4326';
+                        styleFishnet = 'solidary:hexa_goods';
+                        break;
+                    case 'education':
+                        style = "solidary:soli_education";
+                        wmsLayer = 'solidary:solidary_4326';
+                        styleFishnet = 'solidary:hexa_education';
+                        break
+                    case 'it':
+                        style = "solidary:soli_it";
+                        wmsLayer = 'solidary:solidary_4326';
+                        styleFishnet = 'solidary:hexa_it';
+                        break
+                    case 'kids':
+                        style = "solidary:soli_kids";
+                        wmsLayer = 'solidary:solidary_4326';
+                        styleFishnet = 'solidary:hexa_kids';
+                        break
+                    case 'youth':
+                        style = "solidary:soli_youth";
+                        wmsLayer = 'solidary:solidary_4326';
+                        styleFishnet = 'solidary:hexa_youth';
+                        break
+                    case 'multi':
+                        style = "solidary:soli_multi";
+                        wmsLayer = 'solidary:solidary_4326';
+                        styleFishnet = 'solidary:hexa_multi';
+                        break
+                    case 'queer':
+                        style = "solidary:soli_queer";
+                        wmsLayer = 'solidary:solidary_4326';
+                        styleFishnet = 'solidary:hexa_queer';
+                        break
+                    case 'sports':
+                        style = "solidary:soli_sports";
+                        styleFishnet = 'solidary:hexa_sports';
+                        wmsLayer = 'solidary:solidary_4326';
+                        break
+                    case 'work':
+                        styleFishnet = 'solidary:hexa_work';
+                        style = "solidary:soli_work";
+                        wmsLayer = 'solidary:solidary_4326';
+                        break
+                    case 'initiative':
+                        styleFishnet = 'solidary:hexa_initiative';
+                        style = "solidary:soli_initiative";
+                        wmsLayer = 'solidary:solidary_4326';
+                        break
+                    case 'wlan':
+                        wmsLayer = 'solidary:osm_wlan';
+                        styleFishnet = 'solidary:hexa_wlan';
+                        break
+                    case 'park':
+                        wmsLayer = 'solidary:osm_park';
+                        styleFishnet = 'solidary:hexa_park';
+                        break
+                    case 'library':
+                        styleFishnet = 'solidary:hexa_library';
+                        wmsLayer = 'solidary:osm_library';
+                        break
+                }
+                wmsSource.params_.STYLES = style;
+                wmsSource.params_.LAYERS = wmsLayer;
+                wmsSource.refresh();
+                fishnet_4000000Source.params_.STYLES = styleFishnet;
+                fishnet_2000000Source.params_.STYLES = styleFishnet;
+                fishnet_1000000Source.params_.STYLES = styleFishnet;
+                fishnet_500000Source.params_.STYLES = styleFishnet;
+                fishnet_250000Source.params_.STYLES = styleFishnet;
+                fishnet_125000Source.params_.STYLES = styleFishnet;
+                fishnet_62500Source.params_.STYLES = styleFishnet;
+                fishnet_31250Source.params_.STYLES = styleFishnet;
+                fishnet_15625Source.params_.STYLES = styleFishnet;
+                fishnet_7812Source.params_.STYLES = styleFishnet;
+                fishnet_4000000Source.refresh();
+                fishnet_2000000Source.refresh();
+                fishnet_1000000Source.refresh();
+                fishnet_500000Source.refresh();
+                fishnet_250000Source.refresh();
+                fishnet_125000Source.refresh();
+                fishnet_62500Source.refresh();
+                fishnet_31250Source.refresh();
+                fishnet_15625Source.refresh();
+                fishnet_7812Source.refresh();
+                document.getElementById("legendToggler").style.display = "none";
+            }
+            // fill language toggler
+            function fillLanguageToggler() {
+                url = "https://translation.googleapis.com/language/translate/v2/languages?key="+ googleApiKey+ "&target=en";
+                var xhttp = new XMLHttpRequest();
+                document.getElementById("loadIcon").style.display = "block";
+                var thiz = this;
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("loadIcon").style.display = "none";
+                        var jsonR = JSON.parse(xhttp.responseText);
+                        console.log(jsonR);
+                        for (i = 0; i < jsonR.data.languages.length; i++) {
+                            var selectLang = document.getElementById("selectLang");
+                            var options = document.createElement("div");
+                            options.innerHTML = jsonR.data.languages[i].name + ' - ' + jsonR.data.languages[i].language;
+                            options.onclick = function () {
+                                var lang = this.innerHTML;
+                                lang = lang.split("-");
+                                var langOk = lang[1];
+                                langOk = langOk.trim();
+                                language = langOk;
+                                document.getElementById("languageToggler").style.display = "none";
+                            };
+                            selectLang.append(options);
+                        }
+                    }
+                      if (this.readyState == 4 && this.status == 403) {
+                          document.getElementById("loadIcon").style.display = "none";
+                        if (googleLimit === false) {
+                            document.getElementById("googleLimit").style.display = "block";
+                            googleLimit = true;
+                        }
+                    }
+                };
+                xhttp.open("GET", url, true);
+                xhttp.onerror = function () {
+                    document.getElementById("loadIcon").style.display = "none";
+                                            alert("Ups, something was going wrong. No access to translations.");
+                                        };
+                xhttp.send();
+            }
+            // end  fill language toggler
+
+            // legend translate
+            function googleTranslateLegend() {
+                url = "https://translation.googleapis.com/language/translate/v2?" +
+                        "&q=" + window.solidaryCityMapLegend.en.arts +
+                        "&q=" + window.solidaryCityMapLegend.en.food +
+                        "&q=" + window.solidaryCityMapLegend.en.medical +
+                        "&q=" + window.solidaryCityMapLegend.en.women +
+                        "&q=" + window.solidaryCityMapLegend.en.information +
+                        "&q=" + window.solidaryCityMapLegend.en.legendAndSwitcher +
+                        "&q=" + window.solidaryCityMapLegend.en.allLayers +
+                        "&q=" + window.solidaryCityMapLegend.en.education +
+                        "&q=" + window.solidaryCityMapLegend.en.goods +
+                        "&q=" + window.solidaryCityMapLegend.en.it +
+                        "&q=" + window.solidaryCityMapLegend.en.kids +
+                        "&q=" + window.solidaryCityMapLegend.en.sports +
+                        "&q=" + window.solidaryCityMapLegend.en.queer +
+                        "&q=" + window.solidaryCityMapLegend.en.youth +
+                        "&q=" + window.solidaryCityMapLegend.en.wlan +
+                        "&q=" + window.solidaryCityMapLegend.en.park +
+                        "&q=" + window.solidaryCityMapLegend.en.library +
+                        "&q=" + window.solidaryCityMapLegend.en.multi +
+                        "&q=" + window.solidaryCityMapLegend.en.work +
+                        "&q=" + window.solidaryCityMapLegend.en.initiative +
+                        "&source=en" +
+                        "&target=" + language +
+                        "key=" + googleApiKey;
+                var xhttp = new XMLHttpRequest();
+                document.getElementById("loadIcon").style.display = "block";
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("loadIcon").style.display = "none";
+                        var jsonR = JSON.parse(xhttp.responseText);
+                        document.getElementById("arts").lastChild.data = jsonR.data.translations[0].translatedText;
+                        document.getElementById("food").lastChild.data = jsonR.data.translations[1].translatedText;
+                        document.getElementById("medical").lastChild.data = jsonR.data.translations[2].translatedText;
+                        document.getElementById("women").lastChild.data = jsonR.data.translations[3].translatedText;
+                        document.getElementById("information").lastChild.data = jsonR.data.translations[4].translatedText;
+                        document.getElementById("legendAndSwitcher").innerHTML = jsonR.data.translations[5].translatedText;
+                        document.getElementById("allLayers").lastChild.data = jsonR.data.translations[6].translatedText;
+                        document.getElementById("education").lastChild.data = jsonR.data.translations[7].translatedText;
+                        document.getElementById("goods").lastChild.data = jsonR.data.translations[8].translatedText;
+                        document.getElementById("it").lastChild.data = jsonR.data.translations[9].translatedText;
+                        document.getElementById("kids").lastChild.data = jsonR.data.translations[10].translatedText;
+                        document.getElementById("sports").lastChild.data = jsonR.data.translations[11].translatedText;
+                        document.getElementById("queer").lastChild.data = jsonR.data.translations[12].translatedText;
+                        document.getElementById("youth").lastChild.data = jsonR.data.translations[13].translatedText;
+                        document.getElementById("wlan").lastChild.data = jsonR.data.translations[14].translatedText;
+                        document.getElementById("park").lastChild.data = jsonR.data.translations[15].translatedText;
+                        document.getElementById("library").lastChild.data = jsonR.data.translations[16].translatedText;
+                        document.getElementById("multi").lastChild.data = jsonR.data.translations[17].translatedText;
+                        document.getElementById("work").lastChild.data = jsonR.data.translations[18].translatedText;
+                        document.getElementById("initiative").lastChild.data = jsonR.data.translations[19].translatedText;
+                    }
+                };
+                xhttp.open("GET", url, true);
+                xhttp.onerror = function () {
+                    document.getElementById("loadIcon").style.display = "none";
+                                            alert("Ups, something was going wrong. No access to translations.");
+                                        };
+                xhttp.send();
+            }
+            // legend translate end
+// get url parameters helper
+            function getUrlVars() {
+                var vars = {};
+                var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+                    vars[key] = value;
+                });
+                return vars;
+            }
+
+        </script>
+    </body>
+</html>

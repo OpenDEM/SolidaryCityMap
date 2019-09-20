@@ -4,6 +4,9 @@ www.opendem.info
 based on Openlayers: https://openlayers.org/
 License: BSD 2-Clause License
 https://tldrlegal.com/license/bsd-2-clause-license-(freebsd)
+and ol-geocoder - v3.3.0 a geocoder extension for OpenLayers.
+https://github.com/jonataswalker/ol-geocoder
+
 The application is not build as recommended together with its dependencies, as explained in the Building an OpenLayers Application tutorial of OpenLayers!
 -->
 <html lang="en">
@@ -32,6 +35,7 @@ The application is not build as recommended together with its dependencies, as e
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
         <meta name="theme-color" content="#ffffff">
         <link rel="stylesheet" href="css/ol.css" type="text/css">
+        <link href="css/ol-geocoder.min.css" rel="stylesheet">
         <script src="js/translation_help.js" async></script>
         <script src="js/translation_legal.js" async></script>
         <script src="js/translation_legend.js" async></script>
@@ -55,6 +59,7 @@ The application is not build as recommended together with its dependencies, as e
                 width: 100%;
                 background-color: black;
                 color: white;
+                z-index:9999;
             }
             .modal3.open {
                 display: grid;
@@ -108,8 +113,13 @@ The application is not build as recommended together with its dependencies, as e
             .closeInfo{
                 right: 50px; 
                 top: 15px;
+                position:absolute;                
+            }
+            .wheelchair_accessible{
+                right: 90px; 
+                top: 15px;
                 position:absolute;
-                filter: invert(100%);
+                display: none;
             }
             .languageIcon{
                 position: relative;
@@ -133,11 +143,11 @@ The application is not build as recommended together with its dependencies, as e
                 background-color: black!important;
             }
             .layerSwitcher{
-                top: 0.5em;
+                top: 5.5em;
                 right: 0.5em;
             }      
             .tracker{
-                top: 3.9em;
+                top: 9.0em;
                 right: 0.5em;
             }    
             .modal_content{
@@ -172,14 +182,95 @@ The application is not build as recommended together with its dependencies, as e
                 z-index: 990;
                 display: none;
             }
+            @keyframes cf3FadeInOut {
+                0% {
+                    opacity:1;
+                }
+                45% {
+                    opacity:1;
+                }
+                55% {
+                    opacity:0;
+                }
+                100% {
+                    opacity:0;
+                }
+            }
+            
+            .ol-zoom {
+    top: 5.5em!important;     
+}
+
+.ol-geocoder.gcd-txt-container {
+    width: 100%!important;
+    left: 0em!important; 
+}
+.ol-geocoder ul.gcd-txt-result {
+    width: 100%!important;
+}
+
+            #camping img.top {
+                animation-name: cf3FadeInOut;
+                animation-timing-function: ease-in-out;
+                animation-iteration-count: infinite;
+                animation-duration: 3s;
+                animation-direction: alternate;
+            }
+            #camping img {
+                -webkit-transition: opacity 1s ease-in-out;
+                -moz-transition: opacity 1s ease-in-out;
+                -o-transition: opacity 1s ease-in-out;
+                transition: opacity 1s ease-in-out;
+            }
+            #caravan{
+                position: absolute;
+                left: 32px;
+            }
+
+                #food img.top {
+                animation-name: cf3FadeInOut;
+                animation-timing-function: ease-in-out;
+                animation-iteration-count: infinite;
+                animation-duration: 3s;
+                animation-direction: alternate;
+            }
+            #food img {
+                -webkit-transition: opacity 1s ease-in-out;
+                -moz-transition: opacity 1s ease-in-out;
+                -o-transition: opacity 1s ease-in-out;
+                transition: opacity 1s ease-in-out;
+            }
+            #food_img{
+                position: absolute;
+                left: 32px;
+            }
+            
+            #toilets img.top {
+                animation-name: cf3FadeInOut;
+                animation-timing-function: ease-in-out;
+                animation-iteration-count: infinite;
+                animation-duration: 3s;
+                animation-direction: alternate;
+            }
+            #toilets img {
+                -webkit-transition: opacity 1s ease-in-out;
+                -moz-transition: opacity 1s ease-in-out;
+                -o-transition: opacity 1s ease-in-out;
+                transition: opacity 1s ease-in-out;
+            }
+            #wheelchairToilets{
+                position: absolute;
+                left: 32px;
+            }
         </style>
         <script src="js/ol.js"></script>
+        <script src="js/ol-geocoder.js"></script>
         <title>SolidaryCityMap</title>
     </head>
     <body>
         // header
         <div id="head" class="head">
-            <h2 class="title">SolidaryCityMap&nbsp</h2>
+            <h2 id="titleApp" class="title">SolidaryCityMap&nbsp</h2>
             <img class="languageIcon" src="images/language.jpg" onclick="languageToggler()" alt="Choose Language" height="45" width="45">
             <img class="languageIcon" src="images/help.png" onclick="help()" alt="Help, About and Data" height="45" width="45">
             <img class="languageIcon" src="images/legal.png" onclick="legal()" alt="Legal Notes" height="45" width="45">
@@ -189,7 +280,8 @@ The application is not build as recommended together with its dependencies, as e
         <div id="info" class="info">&nbsp;</div>
         <div id="finfo" class="modal3"><br/>
             <div  id="finfoHeader" class="modal_header_fi">
-                <img onclick="closeInfo()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
+                <img class="wheelchair_accessible" src="images/wheelchair_icon.png" alt="wheelchair accessible" >
+                <img onclick="closeInfo()" class="closeInfo" src="images/if_18_Close_106227.png" alt="close" width="30" height="30" >
             </div>
             <div id="finfoContentAll" class="modal_content_fi">
                 <div  id="finfoHeaderText" class="modal_headerText"></div>
@@ -204,7 +296,7 @@ The application is not build as recommended together with its dependencies, as e
         // language toggler
         <div id="languageToggler" class="modal3">
             <div  id="languageTogglerHeader" class="modal_header"><div  id="languageTogglerText" class="modal_headerText">Choose your Language</div>
-                <img onclick="closeLanguage()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
+                <img onclick="closeLanguage()" class="closeInfo" src="images/if_18_Close_106227.png" alt="close" width="30" height="30" >
             </div>
             <div id="selectLang" class="modal_content">
             </div>
@@ -213,7 +305,7 @@ The application is not build as recommended together with its dependencies, as e
         // help
         <div id="help" class="modal3">
             <div  id="helpHeader" class="modal_header"><div  id="helpText" class="modal_headerText">Help, About and Data</div>
-                <img onclick="closeHelp()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
+                <img onclick="closeHelp()" class="closeInfo" src="images/if_18_Close_106227.png" alt="close" width="30" height="30" >
             </div>
             <div id="selectHelp" class="modal_content">
                 <h2 id="help_headline">Hilfe, Über und Daten</h2>
@@ -223,26 +315,37 @@ The application is not build as recommended together with its dependencies, as e
                 <p id="help_about_text_3">Falls hier Orte fehlen, nicht mehr aktuell sind, oder Du dieses Projekt auf andere Weise unterstützen möchtest, kontaktiere uns bitte:</p>
                 <a href="mailto:contact@opendemdata.info">Email</a>
                 <p id="help_about_text_3_1">Mittels einer Editor Version der Anwendung können registrierte Nutzerinnen und Nutzer selbst Orte hinzufügen, bearbeiten und löschen.</p>
+                <p id="help_about_text_3_1_1">Einge Orte wie öffentliche Bibliotheken, Parks, Toiletten, Duschen, Trimm-Dich Stationen, WLAN Zugangspunkte und kostenlose Zelt- und Wohnwagenstellplätze werden direkt aus OpenStreetMap Daten aufbereitet.</p>
                 <p id="help_about_text_3_2">Die Anwendung ist bisher nur für Mobilgeräte optimiert.</p>
                 <p id="help_about_text_3_3">Mittels von HTML Parametern kann der initiale Standort beim Aufruf definiert werden (Beispiel Berlin, Deutschland).</p>
                 <a href="https://solidary.city?xcoord=52.520008&ycoord=13.404954&zoom=11">https://solidary.city?xcoord=52.520008&ycoord=13.404954&zoom=11</a> 
+                
                 <ul>
                     <li>xcoord = Latitude </li>
                     <li>ycoord = Longitude </li>
                     <li>zoom = Zoom Level </li>
                 </ul>
+                 <button type="button" id="createLink" onclick="createLink()">Create actual Link</button>
                 <h3 id="help_help_headline">Hilfe</h3>	
+                <div class="post-container">                
+                    <div class="post-thumb"><img src="images/locationfinder.png" alt="Location Finder" /></div>
+                    <div class="post-content"><p id="help_help_text12">Adresssuche</p></div>   
+                </div>
                 <div class="post-container">                
                     <div class="post-thumb"><img src="images/clickOnMap.png" alt="Click in the map to get detailed information" /></div>
                     <div class="post-content"><p id="help_help_text1">Klicke auf ein beliebiges Icon in der Karte um detaillierte Informationen zum Ort abfragen zu können.</p></div>   
                 </div>
                 <div class="post-container">                
-                    <div class="post-thumb"><img src="images/clickLayers.png" alt="Click on the Layer menue to change the layers" /></div>
+                    <div class="post-thumb"><img src="images/clickLayers.png" alt="Click on the Layer menu to change the layers" /></div>
                     <div class="post-content"><p id="help_help_text2">Klicke auf das Kartenebenen Icon um gezielt Kartenebenen auszuwählen.</p></div>   
                 </div>
                 <div class="post-container">                
                     <div class="post-thumb"><img src="images/location.png" alt="Show your location" /></div>
                     <div class="post-content"><p id="help_help_text3">Standort anzeigen</p></div>   
+                </div>
+                <div class="post-container">                
+                    <div class="post-thumb"><img src="images/wheelchair_help.png" alt="wheelchair accessible" /></div>
+                    <div class="post-content"><p id="help_help_text11">rollstuhlgeeignet</p></div>   
                 </div>
                 <div class="post-container">                
                     <div class="post-thumb"><img src="images/help_language.png" alt="Help for Language Toggler" /></div>
@@ -256,17 +359,21 @@ The application is not build as recommended together with its dependencies, as e
                     <div class="post-thumb"><img src="images/help_legal.png" alt="Help Legal Notes" /></div>
                     <div class="post-content"><p id="help_help_text6">Rechtliche Hinweise</p></div>   
                 </div>
+                
                 <p id="help_help_text7">Es wird automatisch die voreingestellte Sprache des Browser ermittelt und verwendet. Die Sprache kann über das Icon "Auswahl der Sprache" aber auch noch im nachhinein angepasst werden.</p>
                 <h3 id="help_data_headline">Daten</h3>	
-                <p id="help_help_text8">Die Daten stehen analog zu OSM unter der Open Database License (ODbL). Die Daten können hier als GeoJSON herunter geladen werden: </p>
-
-                <p> <a target="_blank" href="https://solidary.city/downloads/solidarycity.zip">DOWNLOAD</a><i> Attributation: SolidaryCityMap Contributors</i></p>
-                <p> <a target="_blank" href="https://solidary.city/geoserver/solidary/wms?SERVICE=WMS&REQUEST=getCapabilities">Web Mapping Service (WMS)</a><i> Attributation: SolidaryCityMap Contributors</i></p>
-                <p id="help_help_text9">Es wird versucht alle Orte auch in OSM einzutragen, ob dies schon geschehen ist kannst Du in der Spalte "OSM" erkennen.</p>	
+                <p id="help_help_text8">Die Daten stehen unter den folgenden Lizenzen zur Verfügung als GeoJSON.</p>
+                <ul><li><a target="_blank" href="https://opendefinition.org/licenses/odc-pddl/">Open Data Commons Public Domain Dedication and Licence (ODC PDDL)</a></li>
+                <li><a target="_blank" href="https://www.govdata.de/dl-de/zero-2-0">Data licence Germany - Zero - Version 2.0 (dl-de/zero-2-0)</a></li></ul>
+                <p>Download as zipped  <a target="_blank" href="https://solidary.city/downloads/solidarycity.zip">GeoJson</a><i> Attribution: SolidaryCityMap Contributors</i></p>
+                <p>REST <a target="_blank" href="https://www.solidary.city/downloads/solidarycity.json">www.solidary.city/downloads/solidarycity.json</a><i> Attribution: SolidaryCityMap Contributors</i></p>
+                <p><a target="_blank" href="https://petstore.swagger.io/?url=https://solidary.city/swagger/solidaryCityMap.yaml"><img src="images/swagger.png" alt="Swagger REST API" style="width:64px;height:59px;border:0;">Swagger REST Open API</a></p>
+                <p> <a target="_blank" href="https://solidary.city/geoserver/solidary/wms?SERVICE=WMS&REQUEST=getCapabilities">Web Mapping Service (WMS)</a><i> CC-BY-SA, Attribution: SolidaryCityMap Contributors</i></p>
+                <p id="help_help_text9">Ob der Ort in OpenStreetMap eingetragen ist, kannst Du an der Spalte 'OSM' erkennen.</p>	
                 <p id="help_help_text10">Die Übersetzungen mit der Google Translation API kosten Geld. 1 Millionen Zeichen kosten 20 Dollar. Mit Deiner Spende können wir die Kosten gemeinsam tragen. Sie Spende ist leider nicht steuerlich absetzbar.</p>	
                 <a class="dbox-donation-button" target="_blank" href="https://donorbox.org/solidary-city" style="background:#2d81c5 url(images/red_logo.png) no-repeat 37px center; color: #fff;text-decoration: none;font-family: Verdana,sans-serif;display: inline-block;font-size: 16px;padding: 15px 38px 15px 75px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; box-shadow: 0 1px 0 0 #1f5a89; text-shadow: 0 1px rgba(0, 0, 0, 0.3);" >Donate</a>
                 <p><a href="https://github.com/OpenDEM/SolidaryCityMap">
-                        <img src="images/GitHub-Mark-64px.png" alt="GitHub" style="width:64px;height:64px;border:0;"> Code on GitHub
+                        <img src="images/GitHub-Mark-64px.png" alt="GitHub" style="width:64px;height:64px;border:0;">Code on GitHub
                     </a></p>
             </div>
             <div id="helpFooter" class="modal_footer">Translated by Google</div>
@@ -275,7 +382,7 @@ The application is not build as recommended together with its dependencies, as e
         <div id="legal" class="modal3">
             <div  id="legalHeader" class="modal_header">
                 <div  id="legalText" class="modal_headerText">Legal Notes</div>
-                <img onclick="closeLegal()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
+                <img onclick="closeLegal()" class="closeInfo" src="images/if_18_Close_106227.png" alt="close" width="30" height="30" >
             </div>
             <div id="selectLegal" class="modal_content">
                 <h2 id="legal_headline">Rechtliche Hinweise</h2>
@@ -308,6 +415,9 @@ The application is not build as recommended together with its dependencies, as e
                 <h4 id="data_privacy_statement_text10">Karten</h4>
                 <p id="data_privacy_statement_text11">Die hier gezeigten Hintergrundkarten kommen von:</p>
                 <a href="https://www.openstreetmap.org">www.openstreetmap.org</a>
+                <h4 id="data_privacy_statement_text18">Adresssuche</h4>
+                <p id="data_privacy_statement_text19">Der OpenSreetMap basierte Nominatim Dienst wird bereit gestellt von:</p>
+                <a href="https://developer.mapquest.com/">MAPQUEST, INC</a>
                 <h4 id="data_privacy_statement_text12">Icons</h4>
                 <p id="data_privacy_statement_text13">Das preisgekörnte Übersetzungs Icon wurde erstellt von:</p>
                 <a href="http://www.languageicon.org">www.languageicon.org</a>
@@ -317,7 +427,7 @@ The application is not build as recommended together with its dependencies, as e
                 <p id="data_privacy_statement_text16">Die automatische Übersetzung wird durch die Google LLC Cloud Translation API realisiert. 
                     Dafür ist die Verarbeitung der IP-Adresse durch Google LLC. zwingend erforderlich. 
                     Google LLC. ist Privacy Shield zertifiziert. Die Zusammenarbeit mit Google LLC in datenschutzrechtlicher Hinsicht erfolgt auf der Grundlage eines abgeschlossenen Vertrags über die gemeinsame Verantwortlichkeit nach Art. 26 DSGVO, abrufbar unter:</p>
-                <p><a href="https://privacy.google.com/intl/de/businesses/compliance/#?modal_active=none">Google Businesses Compliance</a></p>
+                <p><a href="https://privacy.google.com/intl/de/businesses/compliance/#?modal_active=none">Google Business Compliance</a></p>
                 <p id="data_privacy_statement_text17">Im Übrigen tritt der Nutzer durch die Nutzung der Cloud Translation API unmittelbar mit Google in ein Nutzungsverhältnis.</p>
             </div>
             <div id="legalFooter" class="modal_footer">Translated by Google</div>
@@ -336,6 +446,11 @@ The application is not build as recommended together with its dependencies, as e
                     <input type="radio" class="bigradio" name="legendRadio" value="arts" onclick="changeLayer(this)">
                     <img src="images/arts.png" alt="Arts and Culture">Arts and Culture
                 </div>
+                <div id="camping">
+                    <input type="radio" class="bigradio" name="campingRadio" value="camping" onclick="changeLayer(this)">
+                    <img class="bottom" src="images/tents.png" alt="Camping / Caravan Site">
+                    <img  id="caravan" class="top" src="images/campingcar.png" alt="Camping / Caravan Site">Camping / Caravan Site
+                </div>
                 <div id="education">
                     <input type="radio" class="bigradio" name="legendRadio" value="education" onclick="changeLayer(this)">
                     <img src="images/education.png" alt="Education">Education
@@ -346,7 +461,8 @@ The application is not build as recommended together with its dependencies, as e
                 </div>
                 <div id="food">
                     <input type="radio" class="bigradio" name="legendRadio" value="food" onclick="changeLayer(this)">
-                    <img src="images/food.png" alt="Food">Food
+                     <img class="bottom" src="images/fruits.png" alt="Fruits">
+                    <img  id="food_img" class="top" src="images/food.png" alt="Food">Food
                 </div>
                 <div id="goods">
                     <input type="radio" class="bigradio" name="legendRadio" value="goods" onclick="changeLayer(this)">
@@ -381,9 +497,18 @@ The application is not build as recommended together with its dependencies, as e
                     <input type="radio" class="bigradio" name="legendRadio" value="sports" onclick="changeLayer(this)">
                     <img src="images/sports.png" alt="Sports">Sports
                 </div>
+                <div id="toilets">
+                    <input type="radio" class="bigradio" name="legendRadio" value="toilets" onclick="changeLayer(this)">
+                    <img src="images/toilets.png" class="bottom" alt="Toilets">
+                    <img id="wheelchairToilets" class="top" src="images/wheelchair.png" alt="Wheelcair accessible Toilets">Toilets
+                </div>
                 <div id="information">
                     <input type="radio" class="bigradio" name="legendRadio" value="information" onclick="changeLayer(this)">
                     <img src="images/information.png" alt="Refugees Advice Center">Refugees Advice Center
+                </div>
+                <div id="shower">
+                    <input type="radio" class="bigradio" name="legendRadio" value="shower" onclick="changeLayer(this)">
+                    <img src="images/shower.png" alt="Shower">Shower
                 </div>
                 <div id="initiative">
                     <input type="radio" class="bigradio" name="legendRadio" value="initiative" onclick="changeLayer(this)">
@@ -411,6 +536,7 @@ The application is not build as recommended together with its dependencies, as e
         // show when google api request limit has been achieved
         <div id="googleLimit" class="modal3">
             <div  id="googleLimitHeader" class="modal_header"><div  id="googleLimitHeaderText" class="modal_headerText"><h2>Google Limit achieved</h2></div>
+                <img class="wheelchair_accessible" src="images/wheelchair_icon.png" alt="wheelchair accessible" >
                 <img onclick="closeLimit()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
             </div>
             <div class="modal_content">
@@ -424,6 +550,18 @@ The application is not build as recommended together with its dependencies, as e
         </div>
         <div id="loadIcon" class="loadIcon"> <img src="images/ajax-loader-big.gif" alt="Load icon"> </div>
         <script type="text/javascript">
+            
+            function documentLoaded (e) {
+ // handle very small displays 
+        if(innerWidth < 350){
+  var title =  document.getElementById('titleApp');
+  title.style.fontSize = '1.2rem';
+  
+ }
+}
+
+document.addEventListener('DOMContentLoaded', documentLoaded);
+
             var wmsUrl = "";
             var servletUrl = "";
             var googleApiKey = ""
@@ -681,18 +819,21 @@ The application is not build as recommended together with its dependencies, as e
                 maxResolution: 350,
                 minResolution: 60
             });
+            
+            
+   
             wmsSource = new ol.source.ImageWMS({
                 url: wmsUrl + '/geoserver/solidary/wms',
-                params: {'LAYERS': 'solidary:solidary_4326,solidary:osm_library,solidary:osm_wlan,solidary:osm_park'
+                params: {'LAYERS': 'solidary:repaircafedotorg,solidary:foodsharingdotde,solidary:mundraubdotorg,solidary:osm_library,solidary:osm_wlan,solidary:osm_park,solidary:osm_toilets,solidary:osm_fitnessstation,solidary:osm_camping,solidary:osm_showers,solidary:solidary_4326'
                 },
                 ratio: 1,
                 serverType: 'geoserver',
-                attributions: ', SolidaryCityMap contributors'
-            });           
-                 wmsSource.on('imageloaderror', function() {
-        alert('Ups, something went wrong. The MapService is yet not available.');
-      });
-            
+                attributions: ', SolidaryCityMap contributors,  <a href="https://mundraub.org/">Mundraub.org</a> Contributors, <a href="https://foodsharing.de/">Foodsharing.de</a> Contributors, <a href="https://repaircafe.org">Repaircafe.org</a> Contributors, , Location Finder Service by <a href="https://developer.mapquest.com/">MAPQUEST, INC</a>'
+            });
+            wmsSource.on('imageloaderror', function () {
+                alert('Ups, something went wrong. The MapService is yet not available.');
+            });
+
             var wms = new ol.layer.Image({
                 source: wmsSource,
                 maxResolution: 60
@@ -701,7 +842,7 @@ The application is not build as recommended together with its dependencies, as e
             // url parameter coordinates
             var ycoord = 6.9619;
             var xcoord = 50.9389;
-            var zoomView = 12;
+            var zoomView = 14;
             try {
                 if (getUrlVars()["xcoord"] != undefined) {
                     xcoord = parseFloat(getUrlVars()["xcoord"]);
@@ -738,6 +879,30 @@ The application is not build as recommended together with its dependencies, as e
                 layers: [osm, fishnet_4000000, fishnet_2000000, fishnet_1000000, fishnet_500000, fishnet_250000, fishnet_125000, fishnet_62500, fishnet_31250, fishnet_15625, fishnet_7812, wms],
                 view: view
             });
+            
+            
+            // geocoder
+                var geocoder = new Geocoder('nominatim', {
+  provider: 'mapquest',
+  key: 'YMQCGTODj1xjWgIsGJHN6kuLO6k39XGB',
+  lang: 'en-US', //en-US, fr-FR
+  placeholder: 'Search for ...',
+  targetType: 'text-input',
+  limit: 5,
+  keepOpen: true
+});
+
+map.addControl(geocoder);
+
+
+geocoder.on('addresschosen', function(evt){
+  var feature = evt.feature,
+      coord = evt.coordinate,
+      address = evt.address;
+  // some popup solution
+  content.innerHTML = '<p>'+ address.formatted +'</p>';
+  overlay.setPosition(coord);
+});
 
             // FeatureInfo
             map.on('singleclick', function (evt) {
@@ -746,7 +911,7 @@ The application is not build as recommended together with its dependencies, as e
                         evt.coordinate, viewResolution, 'EPSG:3857',
                         {'INFO_FORMAT': 'text/html'});
                 if (url) {
-                     document.getElementById("loadIcon").style.display = "block";
+                    document.getElementById("loadIcon").style.display = "block";
                     url = url.replace("text%2Fhtml", "application%2Fjson");
                     var xhttp = new XMLHttpRequest();
                     xhttp.onreadystatechange = function () {
@@ -762,6 +927,13 @@ The application is not build as recommended together with its dependencies, as e
                                 var adress = jsonRes.features[0].properties.adress;
                                 var mails = jsonRes.features[0].properties.mails;
                                 var translation = "";
+                                var wheelchair = jsonRes.features[0].properties.wheelchair;
+                                if (wheelchair === 1){
+                                    document.getElementsByClassName("wheelchair_accessible")[0].style.display = "block";
+                                } else {
+                                    document.getElementsByClassName("wheelchair_accessible")[0].style.display = "none";
+                                }
+                                
                                 if (jsonRes.features[0].properties.transla != null) {
                                     translation = jsonRes.features[0].properties.transla;
                                 }
@@ -830,17 +1002,17 @@ The application is not build as recommended together with its dependencies, as e
                                             if (xhr.readyState == 4 && xhr.status == 200) {
                                                 var json = JSON.parse(xhr.responseText);
                                                 console.log(json)
-                                                if(json.translation){
-                                                document.getElementById("finfoContent").innerHTML = json.translation;
-                                                document.getElementById("finfo").style.display = "block";
-                                            } else {
-                                                 alert("Ups, something was going wrong. No access to translations.");
-                                            }
+                                                if (json.translation) {
+                                                    document.getElementById("finfoContent").innerHTML = json.translation;
+                                                    document.getElementById("finfo").style.display = "block";
+                                                } else {
+                                                    alert("Ups, something was going wrong. No access to translations.");
+                                                }
                                             }
                                         }
                                         var data = JSON.stringify(jsonReq);
                                         xhr.send();
-                                    } else {
+                                    } else if (language != "ckb" && language != "sdh"){
                                         url = "https://translation.googleapis.com/language/translate/v2?" +
                                                 "q=" + text +
                                                 "&q=" + name +
@@ -868,6 +1040,9 @@ The application is not build as recommended together with its dependencies, as e
                                             alert("Ups, something was going wrong. No access to translations.");
                                         };
                                         xhttp.send();
+                                    } else {
+                                        document.getElementById("finfoContent").innerHTML = text;
+                                    document.getElementById("finfo").style.display = "block";
                                     }
                                 } else {
                                     document.getElementById("finfoContent").innerHTML = text;
@@ -879,8 +1054,8 @@ The application is not build as recommended together with its dependencies, as e
                     xhttp.open("GET", url, true);
                     xhttp.onerror = function () {
                         document.getElementById("loadIcon").style.display = "none";
-                                            alert("Ups, something was going wrong. No access to FeatureInfo.");
-                                        };
+                        alert("Ups, something was going wrong. No access to FeatureInfo.");
+                    };
                     xhttp.send();
                 }
             });
@@ -912,7 +1087,7 @@ The application is not build as recommended together with its dependencies, as e
                         "&target=" + language +
                         // referrer protected googlwe api key - get a test key for developing
                         "&key=" + googleApiKey;
-                        document.getElementById("loadIcon").style.display = "block";
+                document.getElementById("loadIcon").style.display = "block";
                 var xhttpLegal = new XMLHttpRequest();
                 xhttpLegal.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
@@ -933,8 +1108,8 @@ The application is not build as recommended together with its dependencies, as e
                 xhttpLegal.open("POST", url_legal, true);
                 xhttpLegal.onerror = function () {
                     document.getElementById("loadIcon").style.display = "none";
-                                            alert("Ups, something was going wrong");
-                                        };
+                    alert("Ups, something was going wrong");
+                };
                 xhttpLegal.send();
                 // google translate for help end
                 // translate for legal notes and about 2. parts because more than 4000 chars are blockt
@@ -1011,8 +1186,8 @@ The application is not build as recommended together with its dependencies, as e
                 xhttpLegal2.open("POST", url_legal, true);
                 xhttpLegal2.onerror = function () {
                     document.getElementById("loadIcon").style.display = "none";
-                                            alert("Ups, something was going wrong");
-                                        };
+                    alert("Ups, something was going wrong");
+                };
                 xhttpLegal2.send();
             }
             // google translate legal end
@@ -1037,6 +1212,7 @@ The application is not build as recommended together with its dependencies, as e
                         "&q=" + window.solidaryCityMapHelp.de.help_help_text10 +
                         "&q=" + window.solidaryCityMapHelp.de.help_about_text_3_2 +
                         "&q=" + window.solidaryCityMapHelp.de.help_about_text_3_3 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_about_text_3_1_1 +
                         "&source=de" +
                         "&target=" + language +
                         // referrer protected google api key - get a test key for developing
@@ -1065,6 +1241,7 @@ The application is not build as recommended together with its dependencies, as e
                         document.getElementById("help_help_text10").innerHTML = jsonR.data.translations[15].translatedText;
                         document.getElementById("help_about_text_3_2").innerHTML = jsonR.data.translations[16].translatedText;
                         document.getElementById("help_about_text_3_3").innerHTML = jsonR.data.translations[17].translatedText;
+                        document.getElementById("help_about_text_3_1_1").innerHTML = jsonR.data.translations[18].translatedText;
                     }
                     if (this.readyState == 4 && this.status == 403) {
                         document.getElementById("loadIcon").style.display = "none";
@@ -1077,8 +1254,8 @@ The application is not build as recommended together with its dependencies, as e
                 xhttphelp.open("GET", url_help, true);
                 xhttphelp.onerror = function () {
                     document.getElementById("loadIcon").style.display = "none";
-                                            alert("Ups, something was going wrong");
-                                        };
+                    alert("Ups, something was going wrong");
+                };
                 xhttphelp.send();
             }
             // help translate request end
@@ -1105,6 +1282,9 @@ The application is not build as recommended together with its dependencies, as e
                 document.getElementById("multi").lastChild.data = window.solidaryCityMapLegend[language].multi;
                 document.getElementById("work").lastChild.data = window.solidaryCityMapLegend[language].work;
                 document.getElementById("initiative").lastChild.data = window.solidaryCityMapLegend[language].initiative;
+                document.getElementById("camping").lastChild.data = window.solidaryCityMapLegend[language].camping;
+                document.getElementById("toilets").lastChild.data = window.solidaryCityMapLegend[language].toilets;
+                document.getElementById("shower").lastChild.data = window.solidaryCityMapLegend[language].shower;
             }
             // human translations legend
             function humanTranslateHelp() {
@@ -1184,11 +1364,11 @@ The application is not build as recommended together with its dependencies, as e
                 switch (id.value) {
                     case 'all':
                         style = "";
-                        wmsLayer = 'solidary:solidary_4326,solidary:osm_library,solidary:osm_wlan,solidary:osm_park';
+                        wmsLayer = 'solidary:solidary_4326,solidary:osm_library,solidary:osm_wlan,solidary:osm_park,solidary:repaircafedotorg,solidary:foodsharingdotde,solidary:mundraubdotorg,solidary:osm_toilets,solidary:osm_fitnessstation,solidary:osm_camping,solidary:osm_showers';
                         break;
                     case 'food':
-                        style = "solidary:soli_food";
-                        wmsLayer = 'solidary:solidary_4326';
+                        style = "solidary:soli_food,solidary:soli_fruits,solidary:soli_food";
+                        wmsLayer = 'solidary:solidary_4326,solidary:mundraubdotorg,solidary:foodsharingdotde';
                         styleFishnet = 'solidary:hexa_food';
                         break;
                     case 'medical':
@@ -1212,8 +1392,8 @@ The application is not build as recommended together with its dependencies, as e
                         styleFishnet = 'solidary:hexa_women';
                         break;
                     case 'goods':
-                        style = "solidary:soli_goods";
-                        wmsLayer = 'solidary:solidary_4326';
+                        style = "solidary:soli_goods,solidary:soli_goods";
+                        wmsLayer = 'solidary:solidary_4326,solidary:repaircafedotorg';
                         styleFishnet = 'solidary:hexa_goods';
                         break;
                     case 'education':
@@ -1247,9 +1427,9 @@ The application is not build as recommended together with its dependencies, as e
                         styleFishnet = 'solidary:hexa_queer';
                         break
                     case 'sports':
-                        style = "solidary:soli_sports";
+                        style = "solidary:soli_sports,solidary:soli_sports";
                         styleFishnet = 'solidary:hexa_sports';
-                        wmsLayer = 'solidary:solidary_4326';
+                        wmsLayer = 'solidary:solidary_4326,solidary:osm_fitnessstation';
                         break
                     case 'work':
                         styleFishnet = 'solidary:hexa_work';
@@ -1273,6 +1453,18 @@ The application is not build as recommended together with its dependencies, as e
                         styleFishnet = 'solidary:hexa_library';
                         wmsLayer = 'solidary:osm_library';
                         break
+                    case 'toilets':
+                        wmsLayer = 'solidary:osm_toilets';
+                        styleFishnet = 'solidary:hexa_toilets';
+                        break;
+                    case 'camping':
+                        wmsLayer = 'solidary:osm_camping';
+                        styleFishnet = 'solidary:hexa_camping';
+                        break;
+                    case 'shower':
+                        wmsLayer = 'solidary:osm_showers';
+                        styleFishnet = 'solidary:hexa_shower';
+                        break;
                 }
                 wmsSource.params_.STYLES = style;
                 wmsSource.params_.LAYERS = wmsLayer;
@@ -1301,7 +1493,7 @@ The application is not build as recommended together with its dependencies, as e
             }
             // fill language toggler
             function fillLanguageToggler() {
-                url = "https://translation.googleapis.com/language/translate/v2/languages?key="+ googleApiKey+ "&target=en";
+                url = "https://translation.googleapis.com/language/translate/v2/languages?key=" + googleApiKey + "&target=en";
                 var xhttp = new XMLHttpRequest();
                 document.getElementById("loadIcon").style.display = "block";
                 var thiz = this;
@@ -1309,7 +1501,13 @@ The application is not build as recommended together with its dependencies, as e
                     if (this.readyState == 4 && this.status == 200) {
                         document.getElementById("loadIcon").style.display = "none";
                         var jsonR = JSON.parse(xhttp.responseText);
-                        console.log(jsonR);
+                        //console.log(jsonR);
+                        // add custom languages with no automatic transformation
+                        var ckb = {language: "ckb", name: "Kurdish (Sormani)"};
+                        jsonR.data.languages.splice(52, 0, ckb);
+                        var sdh = {language: "sdh", name: "Kurdish (Pehlewani)"};
+                        jsonR.data.languages.splice(53, 0, sdh);
+                        
                         for (i = 0; i < jsonR.data.languages.length; i++) {
                             var selectLang = document.getElementById("selectLang");
                             var options = document.createElement("div");
@@ -1320,13 +1518,20 @@ The application is not build as recommended together with its dependencies, as e
                                 var langOk = lang[1];
                                 langOk = langOk.trim();
                                 language = langOk;
+                                if (language === 'ckb'){
+                                    alert('Sorry, no automatic translations for Central Kurdish (Sorani) yet. If no human translation is availabe the default language is used.');
+                                }
+                                if (language === 'sdh'){
+                                    alert('Sorry, no automatic translations for South Kurdish (Pehlewani) yet. If no human translation is availabe the default language is used.');
+                                }
+                                
                                 document.getElementById("languageToggler").style.display = "none";
                             };
                             selectLang.append(options);
                         }
                     }
-                      if (this.readyState == 4 && this.status == 403) {
-                          document.getElementById("loadIcon").style.display = "none";
+                    if (this.readyState == 4 && this.status == 403) {
+                        document.getElementById("loadIcon").style.display = "none";
                         if (googleLimit === false) {
                             document.getElementById("googleLimit").style.display = "block";
                             googleLimit = true;
@@ -1336,8 +1541,8 @@ The application is not build as recommended together with its dependencies, as e
                 xhttp.open("GET", url, true);
                 xhttp.onerror = function () {
                     document.getElementById("loadIcon").style.display = "none";
-                                            alert("Ups, something was going wrong. No access to translations.");
-                                        };
+                    alert("Ups, something was going wrong. No access to translations.");
+                };
                 xhttp.send();
             }
             // end  fill language toggler
@@ -1365,6 +1570,9 @@ The application is not build as recommended together with its dependencies, as e
                         "&q=" + window.solidaryCityMapLegend.en.multi +
                         "&q=" + window.solidaryCityMapLegend.en.work +
                         "&q=" + window.solidaryCityMapLegend.en.initiative +
+                        "&q=" + window.solidaryCityMapLegend.en.camping +
+                        "&q=" + window.solidaryCityMapLegend.en.toilets +
+                        "&q=" + window.solidaryCityMapLegend.en.shower +
                         "&source=en" +
                         "&target=" + language +
                         "&key=" + googleApiKey;
@@ -1394,13 +1602,16 @@ The application is not build as recommended together with its dependencies, as e
                         document.getElementById("multi").lastChild.data = jsonR.data.translations[17].translatedText;
                         document.getElementById("work").lastChild.data = jsonR.data.translations[18].translatedText;
                         document.getElementById("initiative").lastChild.data = jsonR.data.translations[19].translatedText;
+                        document.getElementById("camping").lastChild.data = jsonR.data.translations[20].translatedText;
+                        document.getElementById("toilets").lastChild.data = jsonR.data.translations[21].translatedText;
+                        document.getElementById("shower").lastChild.data = jsonR.data.translations[22].translatedText;
                     }
                 };
                 xhttp.open("GET", url, true);
                 xhttp.onerror = function () {
                     document.getElementById("loadIcon").style.display = "none";
-                                            alert("Ups, something was going wrong. No access to translations.");
-                                        };
+                    alert("Ups, something was going wrong. No access to translations.");
+                };
                 xhttp.send();
             }
             // legend translate end
@@ -1411,6 +1622,21 @@ The application is not build as recommended together with its dependencies, as e
                     vars[key] = value;
                 });
                 return vars;
+            }
+            
+            function createLink(){
+                console.log('link');
+                var coordinates = map.getView().getCenter();
+                var latlong = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326')
+                var link = 'https://solidary.city?xcoord='+ latlong[1] +'52.520008&ycoord='+latlong[0]+'&zoom='+map.getView().getZoom();
+
+     var dummy = document.createElement("textarea");
+    document.body.appendChild(dummy);
+    dummy.value = link;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+    alert('Copy Link to Clipboard');
             }
 
         </script>

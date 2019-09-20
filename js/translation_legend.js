@@ -24,7 +24,10 @@ var legend_en = {
     "library" : "Library",
     "multi" : "Multiple Utilisation",
     "initiative": "Initiative",
-    "work": "Employment Service"
+    "work": "Employment Service",
+    "camping": "Camping / Caravan Site",
+    "toilets" : "Toilets",
+    "shower" : "Shower"
 };
 
 window.solidaryCityMapLegend.en = legend_en;
@@ -52,7 +55,10 @@ var legend_de = {
     "library" : "Bücherei",
     "multi": "Mehrfachnutzung",
     "initiative": "Solidarity City Initiative",
-    "work": "Arbeitsberatung"
+    "work": "Arbeitsberatung",
+    "camping": "Zelt- / Wohnwagenstellplatz",
+    "toilets" : "Toiletten",
+    "shower" : "Duschen"
 };
 
 window.solidaryCityMapLegend.de = legend_de;

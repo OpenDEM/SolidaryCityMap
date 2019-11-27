@@ -375,6 +375,8 @@ The application is not build as recommended together with its dependencies, as e
                 <p><a href="https://github.com/OpenDEM/SolidaryCityMap">
                         <img src="images/GitHub-Mark-64px.png" alt="GitHub" style="width:64px;height:64px;border:0;">Code on GitHub
                     </a></p>
+                    <p id="help_help_text13">Andere Kartenanwendungen im Sinne einer Solidarity City:</p><a target="_blank" href="maps.html">Weblinks</a> 
+                        
             </div>
             <div id="helpFooter" class="modal_footer">Translated by Google</div>
         </div>
@@ -450,6 +452,10 @@ The application is not build as recommended together with its dependencies, as e
                     <input type="radio" class="bigradio" name="campingRadio" value="camping" onclick="changeLayer(this)">
                     <img class="bottom" src="images/tents.png" alt="Camping / Caravan Site">
                     <img  id="caravan" class="top" src="images/campingcar.png" alt="Camping / Caravan Site">Camping / Caravan Site
+                </div>
+                <div id="drinking_water">
+                    <input type="radio" class="bigradio" name="legendRadio" value="drinking_water" onclick="changeLayer(this)">
+                    <img src="images/drinkingwater.png" alt="Education">Drinking Water
                 </div>
                 <div id="education">
                     <input type="radio" class="bigradio" name="legendRadio" value="education" onclick="changeLayer(this)">
@@ -566,7 +572,8 @@ document.addEventListener('DOMContentLoaded', documentLoaded);
             var servletUrl = "";
             var googleApiKey = ""
             if (document.domain === 'localhost') {
-                wmsUrl = "http://localhost:8080";
+                wmsUrl = "https://solidary.city";
+           //     wmsUrl = "http://localhost:8080";
                 servletUrl = "http://localhost:8081";
                 // getYourOwnKey
                 googleApiKey = "AIzaSyDrWdSgcjLwmSyAu6X38Y9nYLifB1pI0n0";
@@ -824,7 +831,7 @@ document.addEventListener('DOMContentLoaded', documentLoaded);
    
             wmsSource = new ol.source.ImageWMS({
                 url: wmsUrl + '/geoserver/solidary/wms',
-                params: {'LAYERS': 'solidary:repaircafedotorg,solidary:foodsharingdotde,solidary:mundraubdotorg,solidary:osm_library,solidary:osm_wlan,solidary:osm_park,solidary:osm_toilets,solidary:osm_fitnessstation,solidary:osm_camping,solidary:osm_showers,solidary:solidary_4326'
+                params: {'LAYERS': 'solidary:osm_drinking_water,solidary:repaircafedotorg,solidary:foodsharingdotde,solidary:mundraubdotorg,solidary:osm_library,solidary:osm_wlan,solidary:osm_park,solidary:osm_toilets,solidary:osm_fitnessstation,solidary:osm_camping,solidary:osm_showers,solidary:solidary_4326'
                 },
                 ratio: 1,
                 serverType: 'geoserver',
@@ -1213,6 +1220,9 @@ geocoder.on('addresschosen', function(evt){
                         "&q=" + window.solidaryCityMapHelp.de.help_about_text_3_2 +
                         "&q=" + window.solidaryCityMapHelp.de.help_about_text_3_3 +
                         "&q=" + window.solidaryCityMapHelp.de.help_about_text_3_1_1 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_text11 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_text12 +
+                        "&q=" + window.solidaryCityMapHelp.de.help_help_text13 +
                         "&source=de" +
                         "&target=" + language +
                         // referrer protected google api key - get a test key for developing
@@ -1242,6 +1252,9 @@ geocoder.on('addresschosen', function(evt){
                         document.getElementById("help_about_text_3_2").innerHTML = jsonR.data.translations[16].translatedText;
                         document.getElementById("help_about_text_3_3").innerHTML = jsonR.data.translations[17].translatedText;
                         document.getElementById("help_about_text_3_1_1").innerHTML = jsonR.data.translations[18].translatedText;
+                        document.getElementById("help_help_text11").innerHTML = jsonR.data.translations[19].translatedText;
+                        document.getElementById("help_help_text12").innerHTML = jsonR.data.translations[20].translatedText;
+                        document.getElementById("help_help_text13").innerHTML = jsonR.data.translations[21].translatedText;
                     }
                     if (this.readyState == 4 && this.status == 403) {
                         document.getElementById("loadIcon").style.display = "none";
@@ -1285,6 +1298,7 @@ geocoder.on('addresschosen', function(evt){
                 document.getElementById("camping").lastChild.data = window.solidaryCityMapLegend[language].camping;
                 document.getElementById("toilets").lastChild.data = window.solidaryCityMapLegend[language].toilets;
                 document.getElementById("shower").lastChild.data = window.solidaryCityMapLegend[language].shower;
+                document.getElementById("drinking_water").lastChild.data = window.solidaryCityMapLegend[language].drinking_water;
             }
             // human translations legend
             function humanTranslateHelp() {
@@ -1364,7 +1378,7 @@ geocoder.on('addresschosen', function(evt){
                 switch (id.value) {
                     case 'all':
                         style = "";
-                        wmsLayer = 'solidary:solidary_4326,solidary:osm_library,solidary:osm_wlan,solidary:osm_park,solidary:repaircafedotorg,solidary:foodsharingdotde,solidary:mundraubdotorg,solidary:osm_toilets,solidary:osm_fitnessstation,solidary:osm_camping,solidary:osm_showers';
+                        wmsLayer = 'solidary:solidary_4326,solidary:osm_library,solidary:osm_wlan,solidary:osm_park,solidary:repaircafedotorg,solidary:foodsharingdotde,solidary:mundraubdotorg,solidary:osm_toilets,solidary:osm_fitnessstation,solidary:osm_camping,solidary:osm_showers,solidary:osm_drinking_water';
                         break;
                     case 'food':
                         style = "solidary:soli_food,solidary:soli_fruits,solidary:soli_food";
@@ -1465,6 +1479,10 @@ geocoder.on('addresschosen', function(evt){
                         wmsLayer = 'solidary:osm_showers';
                         styleFishnet = 'solidary:hexa_shower';
                         break;
+                    case 'drinking_water':
+                        wmsLayer = 'solidary:osm_drinking_water';
+                        styleFishnet = 'solidary:hexa_drinking_water';
+                        break;    
                 }
                 wmsSource.params_.STYLES = style;
                 wmsSource.params_.LAYERS = wmsLayer;
@@ -1573,6 +1591,7 @@ geocoder.on('addresschosen', function(evt){
                         "&q=" + window.solidaryCityMapLegend.en.camping +
                         "&q=" + window.solidaryCityMapLegend.en.toilets +
                         "&q=" + window.solidaryCityMapLegend.en.shower +
+                        "&q=" + window.solidaryCityMapLegend.en.drinking_water +
                         "&source=en" +
                         "&target=" + language +
                         "&key=" + googleApiKey;
@@ -1605,6 +1624,7 @@ geocoder.on('addresschosen', function(evt){
                         document.getElementById("camping").lastChild.data = jsonR.data.translations[20].translatedText;
                         document.getElementById("toilets").lastChild.data = jsonR.data.translations[21].translatedText;
                         document.getElementById("shower").lastChild.data = jsonR.data.translations[22].translatedText;
+                        document.getElementById("drinking_water").lastChild.data = jsonR.data.translations[23].translatedText;
                     }
                 };
                 xhttp.open("GET", url, true);

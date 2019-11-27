@@ -26,7 +26,8 @@ var help_de = {
     "help_help_text9": "Ob der Ort in OpenStreetMap eingetragen ist, kannst Du an der Spalte 'OSM' erkennen.",
     "help_help_text10": "Die Übersetzungen mit der Google Translation API kosten Geld. 1 Millionen Zeichen kosten 20 Dollar. Mit Deiner Spende können wir die Kosten gemeinsam tragen. Die Spende ist leider momentan nicht steuerlich absetzbar.",
     "help_help_text11": "rollstuhlgeeignet",
-    "help_help_text12": "Adresssuche"
+    "help_help_text12": "Adresssuche",
+    "help_help_text13": "Andere Kartenanwendungen im Sinne einer Solidarity City:"
 
 };
 
@@ -59,7 +60,8 @@ var help_en = {
     "help_help_text9": "If the place is mapped in OpenStreetMap, you can see it the 'OSM' column.",
     "help_help_text10": "Translations through the Google Translation API are not free. 1 million characters cost $ 20. With your donation we can bear the costs together. Unfortunately, donations not tax deductible at present.",
     "help_help_text11": "wheelchair accessible",
-    "help_help_text12": "Location Finder"
+    "help_help_text12": "Location Finder",
+    "help_help_text13": "Other webmapping applications in the sense of a Solidarity City:"
 
 };
 

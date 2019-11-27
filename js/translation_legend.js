@@ -27,7 +27,8 @@ var legend_en = {
     "work": "Employment Service",
     "camping": "Camping / Caravan Site",
     "toilets" : "Toilets",
-    "shower" : "Shower"
+    "shower" : "Shower",
+    "drinking_water" : "Drinking Water"
 };
 
 window.solidaryCityMapLegend.en = legend_en;
@@ -58,7 +59,8 @@ var legend_de = {
     "work": "Arbeitsberatung",
     "camping": "Zelt- / Wohnwagenstellplatz",
     "toilets" : "Toiletten",
-    "shower" : "Duschen"
+    "shower" : "Duschen",
+    "drinking_water" : "Trinkwasser"
 };
 
 window.solidaryCityMapLegend.de = legend_de;

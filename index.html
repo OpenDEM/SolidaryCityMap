@@ -280,8 +280,8 @@ The application is not build as recommended together with its dependencies, as e
         <div id="info" class="info">&nbsp;</div>
         <div id="finfo" class="modal3"><br/>
             <div  id="finfoHeader" class="modal_header_fi">
-                <img class="wheelchair_accessible" src="images/wheelchair_icon.png" alt="wheelchair accessible" >
-                <img onclick="closeInfo()" class="closeInfo" src="images/if_18_Close_106227.png" alt="close" width="30" height="30" >
+                <img class="wheelchair_accessible" src="images/wheelchair_icon.svg" alt="wheelchair accessible" width="30" height="30">
+                <img onclick="closeInfo()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
             </div>
             <div id="finfoContentAll" class="modal_content_fi">
                 <div  id="finfoHeaderText" class="modal_headerText"></div>
@@ -296,7 +296,7 @@ The application is not build as recommended together with its dependencies, as e
         // language toggler
         <div id="languageToggler" class="modal3">
             <div  id="languageTogglerHeader" class="modal_header"><div  id="languageTogglerText" class="modal_headerText">Choose your Language</div>
-                <img onclick="closeLanguage()" class="closeInfo" src="images/if_18_Close_106227.png" alt="close" width="30" height="30" >
+                <img onclick="closeLanguage()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
             </div>
             <div id="selectLang" class="modal_content">
             </div>
@@ -305,7 +305,7 @@ The application is not build as recommended together with its dependencies, as e
         // help
         <div id="help" class="modal3">
             <div  id="helpHeader" class="modal_header"><div  id="helpText" class="modal_headerText">Help, About and Data</div>
-                <img onclick="closeHelp()" class="closeInfo" src="images/if_18_Close_106227.png" alt="close" width="30" height="30" >
+                <img onclick="closeHelp()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
             </div>
             <div id="selectHelp" class="modal_content">
                 <h2 id="help_headline">Hilfe, Über und Daten</h2>
@@ -344,7 +344,7 @@ The application is not build as recommended together with its dependencies, as e
                     <div class="post-content"><p id="help_help_text3">Standort anzeigen</p></div>   
                 </div>
                 <div class="post-container">                
-                    <div class="post-thumb"><img src="images/wheelchair_help.png" alt="wheelchair accessible" /></div>
+                    <div class="post-thumb"><img src="images/wheelchair_icon.svg" alt="wheelchair accessible"  width="50" height="50"/></div>
                     <div class="post-content"><p id="help_help_text11">rollstuhlgeeignet</p></div>   
                 </div>
                 <div class="post-container">                
@@ -384,7 +384,7 @@ The application is not build as recommended together with its dependencies, as e
         <div id="legal" class="modal3">
             <div  id="legalHeader" class="modal_header">
                 <div  id="legalText" class="modal_headerText">Legal Notes</div>
-                <img onclick="closeLegal()" class="closeInfo" src="images/if_18_Close_106227.png" alt="close" width="30" height="30" >
+                <img onclick="closeLegal()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
             </div>
             <div id="selectLegal" class="modal_content">
                 <h2 id="legal_headline">Rechtliche Hinweise</h2>
@@ -437,7 +437,8 @@ The application is not build as recommended together with its dependencies, as e
         // legend toggler
         <div id="legendToggler" class="modal3">
             <div  id="legendTogglerHeader" class="modal_header"><div  id="finfoHeaderText" class="modal_headerText"><h2>Legend & Selection</h2></div>
-                <img onclick="closeLegend()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
+               <img onclick="closeLegend()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" > 
+        
             </div>
             <div id="selectLang" class="modal_content">
                 <p id="legendAndSwitcher">Legend and Selection</p>	 
@@ -542,7 +543,7 @@ The application is not build as recommended together with its dependencies, as e
         // show when google api request limit has been achieved
         <div id="googleLimit" class="modal3">
             <div  id="googleLimitHeader" class="modal_header"><div  id="googleLimitHeaderText" class="modal_headerText"><h2>Google Limit achieved</h2></div>
-                <img class="wheelchair_accessible" src="images/wheelchair_icon.png" alt="wheelchair accessible" >
+                <img class="wheelchair_accessible" src="images/wheelchair_icon.svg" alt="wheelchair accessible" width="30" height="30">
                 <img onclick="closeLimit()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" >
             </div>
             <div class="modal_content">
@@ -1600,7 +1601,18 @@ geocoder.on('addresschosen', function(evt){
                 xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
                         document.getElementById("loadIcon").style.display = "none";
-                        var jsonR = JSON.parse(xhttp.responseText);
+                        
+						
+						
+						var response = xhttp.responseText.replace('&lt;','<');
+						response = response.replace('&gt;','>');
+						response = response.replace('&quot;','"');
+						response = response.replace('&amp;','&');
+						response = response.replace("&#39;","'");
+												
+						
+						var jsonR = JSON.parse(response);
+						
                         document.getElementById("arts").lastChild.data = jsonR.data.translations[0].translatedText;
                         document.getElementById("food").lastChild.data = jsonR.data.translations[1].translatedText;
                         document.getElementById("medical").lastChild.data = jsonR.data.translations[2].translatedText;

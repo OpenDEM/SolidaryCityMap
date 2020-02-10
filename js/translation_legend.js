@@ -1,6 +1,6 @@
 window.solidaryCityMapLegend = {};
 // all human translations and the original text 
-window.solidaryCityMapLegend.translations = ["de"];
+window.solidaryCityMapLegend.translations = ["de","it"];
 
 // original
 
@@ -64,3 +64,32 @@ var legend_de = {
 };
 
 window.solidaryCityMapLegend.de = legend_de;
+
+var legend_it = {
+    "arts": "Arte e cultura",
+    "food": "Cibo",
+    "medical": "Assistenza sanitaria",
+    "women": "Centro di consulenza per donne",
+    "information": "Centro di consulenza per rifugiati",
+    "legendAndSwitcher": "Legenda e selettore",
+    "allLayers": "Tutti i livelli",
+    "education": "Educazione",
+    "goods": "Beni e servizi",
+    "it": "Tecnologia e media",
+    "kids": "Bambini",
+    "sports": "Sport",
+    "queer": "Queer, Lesbiche, Gay",
+    "youth": "Gioventù",
+    "wlan" : "Punto di accesso Wi-Fi",
+    "park" : "Parco",
+    "library" : "Biblioteca",
+    "multi" : "Utilizzo multipli",
+    "initiative": "Iniziative",
+    "work": "Centri per l'impiego",
+    "camping": "Area campeggio / roulotte",
+    "toilets" : "Bagni",
+    "shower" : "Docce",
+    "drinking_water" : "Acqua potabile"
+};
+
+window.solidaryCityMapLegend.it = legend_it;

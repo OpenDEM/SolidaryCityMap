@@ -9,3 +9,7 @@ If there are places missing, out of date, or if you would like to support this p
 There is an editor version of the application which allows registered users to add their own places.
 
 [solidary.city](https://solidary.city)
+
+Todos
+* Optimize app for tablets and Desktops
+* Intregrate other datasets

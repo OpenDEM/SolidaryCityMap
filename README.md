@@ -11,5 +11,4 @@ There is an editor version of the application which allows registered users to a
 [solidary.city](https://solidary.city)
 
 Todos
-* Optimize app for Tablets and Desktops
 * Intregrate other datasets

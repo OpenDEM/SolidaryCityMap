@@ -49,17 +49,51 @@ The application is not build as recommended together with its dependencies, as e
             a{ color : cyan}
             .ol-attribution > ul > li > a{color: black;}
             .info {width: 100%;}
-            .modal3 {
-                padding: 20px;
-                display: none;
-                height: 100%;
-                left: 0;
-                position: fixed;
-                top: 0;
-                width: 100%;
-                background-color: black;
-                color: white;
-                z-index:9999;
+            /*        .modal3 {
+                        padding: 20px;
+                        display: none;
+                        height: 100%;
+                        left: 0;
+                        position: fixed;
+                        top: 0;
+                        width: 100%;
+                        background-color: black;
+                        color: white;
+                        z-index:9999;
+                    } */
+
+            /*  small devices 600px and down) */
+            @media only screen and (max-width: 600px) {
+                .modal3 {
+                    padding: 20px;
+                    display: none;
+                    height: 100%;
+                    left: 0;
+                    position: fixed;
+                    top: 0;
+                    width: 100%;
+                    background-color: black;
+                    color: white;
+                    z-index:9999;
+                }
+
+            }
+
+            /* 600px and up) */
+            @media only screen and (min-width: 600px) {
+                .modal3 {
+                    padding: 20px;
+                    display: none;
+                    position: fixed;
+                    top: 100px;
+                    left: 50px;
+                    right: 50px;
+                    bottom: 150px;
+                    background-color: black;
+                    color: white;
+                    z-index:9999;
+                }
+
             }
             .modal3.open {
                 display: grid;
@@ -96,6 +130,7 @@ The application is not build as recommended together with its dependencies, as e
             body{
                 height: 100%;
                 width: 100%;
+                overflow: hidden;
             }
             h1{
                 font-size: 16px;
@@ -135,9 +170,11 @@ The application is not build as recommended together with its dependencies, as e
                 margin-right: 10px;
             }
             #selectLang{
-                height: calc(100% - 200px);;
+                height: calc(100% - 200px);
                 overflow: auto;
                 position: absolute;
+                left: 20px;
+                right: 26px;
             }
             .ol-control button {
                 background-color: black!important;
@@ -196,18 +233,18 @@ The application is not build as recommended together with its dependencies, as e
                     opacity:0;
                 }
             }
-            
-            .ol-zoom {
-    top: 5.5em!important;     
-}
 
-.ol-geocoder.gcd-txt-container {
-    width: 100%!important;
-    left: 0em!important; 
-}
-.ol-geocoder ul.gcd-txt-result {
-    width: 100%!important;
-}
+            .ol-zoom {
+                top: 5.5em!important;     
+            }
+
+            .ol-geocoder.gcd-txt-container {
+                width: 100%!important;
+                left: 0em!important; 
+            }
+            .ol-geocoder ul.gcd-txt-result {
+                width: 100%!important;
+            }
 
             #camping img.top {
                 animation-name: cf3FadeInOut;
@@ -227,7 +264,7 @@ The application is not build as recommended together with its dependencies, as e
                 left: 32px;
             }
 
-                #food img.top {
+            #food img.top {
                 animation-name: cf3FadeInOut;
                 animation-timing-function: ease-in-out;
                 animation-iteration-count: infinite;
@@ -244,7 +281,7 @@ The application is not build as recommended together with its dependencies, as e
                 position: absolute;
                 left: 32px;
             }
-            
+
             #toilets img.top {
                 animation-name: cf3FadeInOut;
                 animation-timing-function: ease-in-out;
@@ -319,13 +356,13 @@ The application is not build as recommended together with its dependencies, as e
                 <p id="help_about_text_3_2">Die Anwendung ist bisher nur für Mobilgeräte optimiert.</p>
                 <p id="help_about_text_3_3">Mittels von HTML Parametern kann der initiale Standort beim Aufruf definiert werden (Beispiel Berlin, Deutschland).</p>
                 <a href="https://solidary.city?xcoord=52.520008&ycoord=13.404954&zoom=11">https://solidary.city?xcoord=52.520008&ycoord=13.404954&zoom=11</a> 
-                
+
                 <ul>
                     <li>xcoord = Latitude </li>
                     <li>ycoord = Longitude </li>
                     <li>zoom = Zoom Level </li>
                 </ul>
-                 <button type="button" id="createLink" onclick="createLink()">Create actual Link</button>
+                <button type="button" id="createLink" onclick="createLink()">Create actual Link</button>
                 <h3 id="help_help_headline">Hilfe</h3>	
                 <div class="post-container">                
                     <div class="post-thumb"><img src="images/locationfinder.png" alt="Location Finder" /></div>
@@ -359,12 +396,12 @@ The application is not build as recommended together with its dependencies, as e
                     <div class="post-thumb"><img src="images/help_legal.png" alt="Help Legal Notes" /></div>
                     <div class="post-content"><p id="help_help_text6">Rechtliche Hinweise</p></div>   
                 </div>
-                
+
                 <p id="help_help_text7">Es wird automatisch die voreingestellte Sprache des Browser ermittelt und verwendet. Die Sprache kann über das Icon "Auswahl der Sprache" aber auch noch im nachhinein angepasst werden.</p>
                 <h3 id="help_data_headline">Daten</h3>	
                 <p id="help_help_text8">Die Daten stehen unter den folgenden Lizenzen zur Verfügung als GeoJSON.</p>
                 <ul><li><a target="_blank" href="https://opendefinition.org/licenses/odc-pddl/">Open Data Commons Public Domain Dedication and Licence (ODC PDDL)</a></li>
-                <li><a target="_blank" href="https://www.govdata.de/dl-de/zero-2-0">Data licence Germany - Zero - Version 2.0 (dl-de/zero-2-0)</a></li></ul>
+                    <li><a target="_blank" href="https://www.govdata.de/dl-de/zero-2-0">Data licence Germany - Zero - Version 2.0 (dl-de/zero-2-0)</a></li></ul>
                 <p>Download as zipped  <a target="_blank" href="https://solidary.city/downloads/solidarycity.zip">GeoJson</a><i> Attribution: SolidaryCityMap Contributors</i></p>
                 <p>REST <a target="_blank" href="https://www.solidary.city/downloads/solidarycity.json">www.solidary.city/downloads/solidarycity.json</a><i> Attribution: SolidaryCityMap Contributors</i></p>
                 <p><a target="_blank" href="https://petstore.swagger.io/?url=https://solidary.city/swagger/solidaryCityMap.yaml"><img src="images/swagger.png" alt="Swagger REST API" style="width:64px;height:59px;border:0;">Swagger REST Open API</a></p>
@@ -375,8 +412,8 @@ The application is not build as recommended together with its dependencies, as e
                 <p><a href="https://github.com/OpenDEM/SolidaryCityMap">
                         <img src="images/GitHub-Mark-64px.png" alt="GitHub" style="width:64px;height:64px;border:0;">Code on GitHub
                     </a></p>
-                    <p id="help_help_text13">Andere Kartenanwendungen im Sinne einer Solidarity City:</p><a target="_blank" href="maps.html">Weblinks</a> 
-                        
+                <p id="help_help_text13">Andere Kartenanwendungen im Sinne einer Solidarity City:</p><a target="_blank" href="maps.html">Weblinks</a> 
+
             </div>
             <div id="helpFooter" class="modal_footer">Translated by Google</div>
         </div>
@@ -437,8 +474,8 @@ The application is not build as recommended together with its dependencies, as e
         // legend toggler
         <div id="legendToggler" class="modal3">
             <div  id="legendTogglerHeader" class="modal_header"><div  id="finfoHeaderText" class="modal_headerText"><h2>Legend & Selection</h2></div>
-               <img onclick="closeLegend()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" > 
-        
+                <img onclick="closeLegend()" class="closeInfo" src="images/if_18_Close_106227.svg" alt="close" width="30" height="30" > 
+
             </div>
             <div id="selectLang" class="modal_content">
                 <p id="legendAndSwitcher">Legend and Selection</p>	 
@@ -468,7 +505,7 @@ The application is not build as recommended together with its dependencies, as e
                 </div>
                 <div id="food">
                     <input type="radio" class="bigradio" name="legendRadio" value="food" onclick="changeLayer(this)">
-                     <img class="bottom" src="images/fruits.png" alt="Fruits">
+                    <img class="bottom" src="images/fruits.png" alt="Fruits">
                     <img  id="food_img" class="top" src="images/food.png" alt="Food">Food
                 </div>
                 <div id="goods">
@@ -557,24 +594,24 @@ The application is not build as recommended together with its dependencies, as e
         </div>
         <div id="loadIcon" class="loadIcon"> <img src="images/ajax-loader-big.gif" alt="Load icon"> </div>
         <script type="text/javascript">
-            
-            function documentLoaded (e) {
- // handle very small displays 
-        if(innerWidth < 350){
-  var title =  document.getElementById('titleApp');
-  title.style.fontSize = '1.2rem';
-  
- }
-}
 
-document.addEventListener('DOMContentLoaded', documentLoaded);
+            function documentLoaded(e) {
+                // handle very small displays 
+                if (innerWidth < 350) {
+                    var title = document.getElementById('titleApp');
+                    title.style.fontSize = '1.2rem';
+
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', documentLoaded);
 
             var wmsUrl = "";
             var servletUrl = "";
             var googleApiKey = ""
             if (document.domain === 'localhost') {
                 wmsUrl = "https://solidary.city";
-           //     wmsUrl = "http://localhost:8080";
+                //     wmsUrl = "http://localhost:8080";
                 servletUrl = "http://localhost:8081";
                 // getYourOwnKey
                 googleApiKey = "AIzaSyDrWdSgcjLwmSyAu6X38Y9nYLifB1pI0n0";
@@ -623,6 +660,10 @@ document.addEventListener('DOMContentLoaded', documentLoaded);
                         googleTranslateLegend();
                     }
                     document.getElementById("legendToggler").style.display = "block";
+                    document.getElementById("head").style.pointerEvents = "none";
+                    document.getElementById("head").style.opacity = "50%";
+                    document.getElementById("map").style.pointerEvents = "none";
+                    document.getElementById("map").style.opacity = "50%";
                 };
                 button.addEventListener('click', layerSwitcher, false);
                 var element = document.createElement('div');
@@ -827,9 +868,9 @@ document.addEventListener('DOMContentLoaded', documentLoaded);
                 maxResolution: 350,
                 minResolution: 60
             });
-            
-            
-   
+
+
+
             wmsSource = new ol.source.ImageWMS({
                 url: wmsUrl + '/geoserver/solidary/wms',
                 params: {'LAYERS': 'solidary:osm_drinking_water,solidary:repaircafedotorg,solidary:foodsharingdotde,solidary:mundraubdotorg,solidary:osm_library,solidary:osm_wlan,solidary:osm_park,solidary:osm_toilets,solidary:osm_fitnessstation,solidary:osm_camping,solidary:osm_showers,solidary:solidary_4326'
@@ -887,30 +928,30 @@ document.addEventListener('DOMContentLoaded', documentLoaded);
                 layers: [osm, fishnet_4000000, fishnet_2000000, fishnet_1000000, fishnet_500000, fishnet_250000, fishnet_125000, fishnet_62500, fishnet_31250, fishnet_15625, fishnet_7812, wms],
                 view: view
             });
-            
-            
+
+
             // geocoder
-                var geocoder = new Geocoder('nominatim', {
-  provider: 'mapquest',
-  key: 'YMQCGTODj1xjWgIsGJHN6kuLO6k39XGB',
-  lang: 'en-US', //en-US, fr-FR
-  placeholder: 'Search for ...',
-  targetType: 'text-input',
-  limit: 5,
-  keepOpen: true
-});
+            var geocoder = new Geocoder('nominatim', {
+                provider: 'mapquest',
+                key: 'YMQCGTODj1xjWgIsGJHN6kuLO6k39XGB',
+                lang: 'en-US', //en-US, fr-FR
+                placeholder: 'Search for ...',
+                targetType: 'text-input',
+                limit: 5,
+                keepOpen: true
+            });
 
-map.addControl(geocoder);
+            map.addControl(geocoder);
 
 
-geocoder.on('addresschosen', function(evt){
-  var feature = evt.feature,
-      coord = evt.coordinate,
-      address = evt.address;
-  // some popup solution
-  content.innerHTML = '<p>'+ address.formatted +'</p>';
-  overlay.setPosition(coord);
-});
+            geocoder.on('addresschosen', function (evt) {
+                var feature = evt.feature,
+                        coord = evt.coordinate,
+                        address = evt.address;
+                // some popup solution
+                content.innerHTML = '<p>' + address.formatted + '</p>';
+                overlay.setPosition(coord);
+            });
 
             // FeatureInfo
             map.on('singleclick', function (evt) {
@@ -936,12 +977,12 @@ geocoder.on('addresschosen', function(evt){
                                 var mails = jsonRes.features[0].properties.mails;
                                 var translation = "";
                                 var wheelchair = jsonRes.features[0].properties.wheelchair;
-                                if (wheelchair === 1){
+                                if (wheelchair === 1) {
                                     document.getElementsByClassName("wheelchair_accessible")[0].style.display = "block";
                                 } else {
                                     document.getElementsByClassName("wheelchair_accessible")[0].style.display = "none";
                                 }
-                                
+
                                 if (jsonRes.features[0].properties.transla != null) {
                                     translation = jsonRes.features[0].properties.transla;
                                 }
@@ -1013,6 +1054,10 @@ geocoder.on('addresschosen', function(evt){
                                                 if (json.translation) {
                                                     document.getElementById("finfoContent").innerHTML = json.translation;
                                                     document.getElementById("finfo").style.display = "block";
+                                                    	 document.getElementById("head").style.pointerEvents = "none";
+	 document.getElementById("head").style.opacity = "50%";
+	 document.getElementById("map").style.pointerEvents = "none";
+	 document.getElementById("map").style.opacity = "50%";
                                                 } else {
                                                     alert("Ups, something was going wrong. No access to translations.");
                                                 }
@@ -1020,7 +1065,7 @@ geocoder.on('addresschosen', function(evt){
                                         }
                                         var data = JSON.stringify(jsonReq);
                                         xhr.send();
-                                    } else if (language != "ckb" && language != "sdh"){
+                                    } else if (language != "ckb" && language != "sdh") {
                                         url = "https://translation.googleapis.com/language/translate/v2?" +
                                                 "q=" + text +
                                                 "&q=" + name +
@@ -1034,11 +1079,23 @@ geocoder.on('addresschosen', function(evt){
                                                 var jsonR = JSON.parse(xhttp.responseText);
                                                 document.getElementById("finfoContent").innerHTML = jsonR.data.translations[0].translatedText;
                                                 document.getElementById("finfo").style.display = "block";
+                                                	 document.getElementById("head").style.pointerEvents = "none";
+	 document.getElementById("head").style.opacity = "50%";
+	 document.getElementById("map").style.pointerEvents = "none";
+	 document.getElementById("map").style.opacity = "50%";
                                             } else if (this.readyState == 4 && this.status == 403) {
                                                 var jsonR = JSON.parse(xhttp.responseText);
                                                 document.getElementById("finfo").style.display = "block";
+                                                	 document.getElementById("head").style.pointerEvents = "none";
+	 document.getElementById("head").style.opacity = "50%";
+	 document.getElementById("map").style.pointerEvents = "none";
+	 document.getElementById("map").style.opacity = "50%";
                                                 if (googleLimit === false) {
                                                     document.getElementById("googleLimit").style.display = "block";
+                                                    	 document.getElementById("head").style.pointerEvents = "none";
+	 document.getElementById("head").style.opacity = "50%";
+	 document.getElementById("map").style.pointerEvents = "none";
+	 document.getElementById("map").style.opacity = "50%";
                                                     googleLimit = true;
                                                 }
                                             }
@@ -1050,11 +1107,20 @@ geocoder.on('addresschosen', function(evt){
                                         xhttp.send();
                                     } else {
                                         document.getElementById("finfoContent").innerHTML = text;
-                                    document.getElementById("finfo").style.display = "block";
+                                        document.getElementById("finfo").style.display = "block";
+                                        document.getElementById("head").style.pointerEvents = "none";
+                                        document.getElementById("head").style.opacity = "50%";
+                                        document.getElementById("map").style.pointerEvents = "none";
+                                        document.getElementById("map").style.opacity = "50%";
+
                                     }
                                 } else {
                                     document.getElementById("finfoContent").innerHTML = text;
                                     document.getElementById("finfo").style.display = "block";
+                                    document.getElementById("head").style.pointerEvents = "none";
+                                    document.getElementById("head").style.opacity = "50%";
+                                    document.getElementById("map").style.pointerEvents = "none";
+                                    document.getElementById("map").style.opacity = "50%";
                                 }
                             }
                         }
@@ -1187,7 +1253,12 @@ geocoder.on('addresschosen', function(evt){
                         document.getElementById("loadIcon").style.display = "none";
                         if (googleLimit === false) {
                             document.getElementById("googleLimit").style.display = "block";
+                            	 document.getElementById("head").style.pointerEvents = "none";
+	 document.getElementById("head").style.opacity = "50%";
+	 document.getElementById("map").style.pointerEvents = "none";
+	 document.getElementById("map").style.opacity = "50%";
                             googleLimit = true;
+                            
                         }
                     }
                 };
@@ -1261,6 +1332,10 @@ geocoder.on('addresschosen', function(evt){
                         document.getElementById("loadIcon").style.display = "none";
                         if (googleLimit === false) {
                             document.getElementById("googleLimit").style.display = "block";
+                            	 document.getElementById("head").style.pointerEvents = "none";
+	 document.getElementById("head").style.opacity = "50%";
+	 document.getElementById("map").style.pointerEvents = "none";
+	 document.getElementById("map").style.opacity = "50%";
                             googleLimit = true;
                         }
                     }
@@ -1321,23 +1396,47 @@ geocoder.on('addresschosen', function(evt){
 // close FeatureInfo
             function closeInfo() {
                 document.getElementById("finfo").style.display = "none";
+                document.getElementById("head").style.pointerEvents = "auto";
+                document.getElementById("head").style.opacity = "1";
+                document.getElementById("map").style.pointerEvents = "auto";
+                document.getElementById("map").style.opacity = "1";
             }
             function closeLanguage() {
                 document.getElementById("languageToggler").style.display = "none";
+                document.getElementById("head").style.pointerEvents = "auto";
+                document.getElementById("head").style.opacity = "1";
+                document.getElementById("map").style.pointerEvents = "auto";
+                document.getElementById("map").style.opacity = "1";
             }
             function closeLegend() {
                 document.getElementById("legendToggler").style.display = "none";
+                document.getElementById("head").style.pointerEvents = "auto";
+                document.getElementById("head").style.opacity = "1";
+                document.getElementById("map").style.pointerEvents = "auto";
+                document.getElementById("map").style.opacity = "1";
             }
             function closeLimit() {
                 document.getElementById("googleLimit").style.display = "none";
+                document.getElementById("head").style.pointerEvents = "auto";
+                document.getElementById("head").style.opacity = "1";
+                document.getElementById("map").style.pointerEvents = "auto";
+                document.getElementById("map").style.opacity = "1";
             }
 
             function closeHelp() {
                 document.getElementById("help").style.display = "none";
+                document.getElementById("head").style.pointerEvents = "auto";
+                document.getElementById("head").style.opacity = "1";
+                document.getElementById("map").style.pointerEvents = "auto";
+                document.getElementById("map").style.opacity = "1";
             }
 
             function closeLegal() {
                 document.getElementById("legal").style.display = "none";
+                document.getElementById("head").style.pointerEvents = "auto";
+                document.getElementById("head").style.opacity = "1";
+                document.getElementById("map").style.pointerEvents = "auto";
+                document.getElementById("map").style.opacity = "1";
             }
             function languageToggler() {
                 if (languageTogglerFilled === false) {
@@ -1345,6 +1444,10 @@ geocoder.on('addresschosen', function(evt){
                     languageTogglerFilled = true;
                 }
                 document.getElementById("languageToggler").style.display = "block";
+                document.getElementById("head").style.pointerEvents = "none";
+                document.getElementById("head").style.opacity = "50%";
+                document.getElementById("map").style.pointerEvents = "none";
+                document.getElementById("map").style.opacity = "50%";
             }
 // open help
             function help() {
@@ -1357,6 +1460,10 @@ geocoder.on('addresschosen', function(evt){
                     googleTranslateHelp();
                 }
                 document.getElementById("help").style.display = "block";
+                document.getElementById("head").style.pointerEvents = "none";
+                document.getElementById("head").style.opacity = "50%";
+                document.getElementById("map").style.pointerEvents = "none";
+                document.getElementById("map").style.opacity = "50%";
             }
 // open legal
             function legal() {
@@ -1370,6 +1477,11 @@ geocoder.on('addresschosen', function(evt){
                     googleTranslateLegal();
                 }
                 document.getElementById("legal").style.display = "block";
+                document.getElementById("head").style.pointerEvents = "none";
+                document.getElementById("head").style.opacity = "50%";
+                document.getElementById("map").style.pointerEvents = "none";
+                document.getElementById("map").style.opacity = "50%";
+
             }
 // change the layers            
             function changeLayer(id) {
@@ -1483,7 +1595,7 @@ geocoder.on('addresschosen', function(evt){
                     case 'drinking_water':
                         wmsLayer = 'solidary:osm_drinking_water';
                         styleFishnet = 'solidary:hexa_drinking_water';
-                        break;    
+                        break;
                 }
                 wmsSource.params_.STYLES = style;
                 wmsSource.params_.LAYERS = wmsLayer;
@@ -1509,6 +1621,11 @@ geocoder.on('addresschosen', function(evt){
                 fishnet_15625Source.refresh();
                 fishnet_7812Source.refresh();
                 document.getElementById("legendToggler").style.display = "none";
+                document.getElementById("head").style.pointerEvents = "auto";
+                document.getElementById("head").style.opacity = "1";
+                document.getElementById("map").style.pointerEvents = "auto";
+                document.getElementById("map").style.opacity = "1";
+
             }
             // fill language toggler
             function fillLanguageToggler() {
@@ -1526,7 +1643,7 @@ geocoder.on('addresschosen', function(evt){
                         jsonR.data.languages.splice(52, 0, ckb);
                         var sdh = {language: "sdh", name: "Kurdish (Pehlewani)"};
                         jsonR.data.languages.splice(53, 0, sdh);
-                        
+
                         for (i = 0; i < jsonR.data.languages.length; i++) {
                             var selectLang = document.getElementById("selectLang");
                             var options = document.createElement("div");
@@ -1537,23 +1654,31 @@ geocoder.on('addresschosen', function(evt){
                                 var langOk = lang[1];
                                 langOk = langOk.trim();
                                 language = langOk;
-                                if (language === 'ckb'){
+                                if (language === 'ckb') {
                                     alert('Sorry, no automatic translations for Central Kurdish (Sorani) yet. If no human translation is availabe the default language is used.');
                                 }
-                                if (language === 'sdh'){
+                                if (language === 'sdh') {
                                     alert('Sorry, no automatic translations for South Kurdish (Pehlewani) yet. If no human translation is availabe the default language is used.');
                                 }
-                                
+
                                 document.getElementById("languageToggler").style.display = "none";
+                                document.getElementById("head").style.pointerEvents = "auto";
+                                document.getElementById("head").style.opacity = "1";
+                                document.getElementById("map").style.pointerEvents = "auto";
+                                document.getElementById("map").style.opacity = "1";
                             };
                             selectLang.append(options);
                         }
-                    }
+                      }
                     if (this.readyState == 4 && this.status == 403) {
                         document.getElementById("loadIcon").style.display = "none";
                         if (googleLimit === false) {
                             document.getElementById("googleLimit").style.display = "block";
                             googleLimit = true;
+                            	 document.getElementById("head").style.pointerEvents = "none";
+	 document.getElementById("head").style.opacity = "50%";
+	 document.getElementById("map").style.pointerEvents = "none";
+	 document.getElementById("map").style.opacity = "50%";
                         }
                     }
                 };
@@ -1601,18 +1726,18 @@ geocoder.on('addresschosen', function(evt){
                 xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
                         document.getElementById("loadIcon").style.display = "none";
-                        
-						
-						
-						var response = xhttp.responseText.replace('&lt;','<');
-						response = response.replace('&gt;','>');
-						response = response.replace('&quot;','"');
-						response = response.replace('&amp;','&');
-						response = response.replace("&#39;","'");
-												
-						
-						var jsonR = JSON.parse(response);
-						
+
+
+
+                        var response = xhttp.responseText.replace('&lt;', '<');
+                        response = response.replace('&gt;', '>');
+                        response = response.replace('&quot;', '"');
+                        response = response.replace('&amp;', '&');
+                        response = response.replace("&#39;", "'");
+
+
+                        var jsonR = JSON.parse(response);
+
                         document.getElementById("arts").lastChild.data = jsonR.data.translations[0].translatedText;
                         document.getElementById("food").lastChild.data = jsonR.data.translations[1].translatedText;
                         document.getElementById("medical").lastChild.data = jsonR.data.translations[2].translatedText;
@@ -1655,20 +1780,20 @@ geocoder.on('addresschosen', function(evt){
                 });
                 return vars;
             }
-            
-            function createLink(){
+
+            function createLink() {
                 console.log('link');
                 var coordinates = map.getView().getCenter();
                 var latlong = ol.proj.transform(coordinates, 'EPSG:3857', 'EPSG:4326')
-                var link = 'https://solidary.city?xcoord='+ latlong[1] +'52.520008&ycoord='+latlong[0]+'&zoom='+map.getView().getZoom();
+                var link = 'https://solidary.city?xcoord=' + latlong[1] + '52.520008&ycoord=' + latlong[0] + '&zoom=' + map.getView().getZoom();
 
-     var dummy = document.createElement("textarea");
-    document.body.appendChild(dummy);
-    dummy.value = link;
-    dummy.select();
-    document.execCommand("copy");
-    document.body.removeChild(dummy);
-    alert('Copy Link to Clipboard');
+                var dummy = document.createElement("textarea");
+                document.body.appendChild(dummy);
+                dummy.value = link;
+                dummy.select();
+                document.execCommand("copy");
+                document.body.removeChild(dummy);
+                alert('Copy Link to Clipboard');
             }
 
         </script>

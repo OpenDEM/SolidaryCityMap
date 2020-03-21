@@ -40,10 +40,7 @@ The application is not build as recommended together with its dependencies, as e
         <script src="js/translation_legal.js" async></script>
         <script src="js/translation_legend.js" async></script>
         <style>
-            .map {
-                height: 80%;
-                width: 97%;
-            }
+           
             a:visited {color: cyan;}
             ​a:link {color: cyan;}
             a{ color : cyan}
@@ -121,16 +118,24 @@ The application is not build as recommended together with its dependencies, as e
                 font-family: "helvetica neue", helvetica, arial, sans-serif;
                 background-color: black;
                 height: 100%;
-                width: 100%;
                 fill: white;
+                 overflow: hidden;
             }
             figcaption{
                 float: right;
             }
             body{
                 height: 100%;
-                width: 100%;
                 overflow: hidden;
+            }
+            .ol-viewport{
+overflow: unset!important;
+}
+ .map {
+                /*height: 80%;
+                width: 97%; */
+                 width: 100%;
+		height: calc(100% - 65px);
             }
             h1{
                 font-size: 16px;
@@ -144,6 +149,7 @@ The application is not build as recommended together with its dependencies, as e
             }
             .head{
                 color: white;  
+                height: 55px;
             }
             .closeInfo{
                 right: 50px; 
@@ -158,11 +164,10 @@ The application is not build as recommended together with its dependencies, as e
             }
             .languageIcon{
                 position: relative;
-                top: -10px;
             }
             .title{
                 float: left;
-                top: -20px;
+                top: -10px;
                 position: relative;
             }
             .help_img{
@@ -305,14 +310,12 @@ The application is not build as recommended together with its dependencies, as e
         <title>SolidaryCityMap</title>
     </head>
     <body>
-        // header
         <div id="head" class="head">
             <h2 id="titleApp" class="title">SolidaryCityMap&nbsp</h2>
             <img class="languageIcon" src="images/language.jpg" onclick="languageToggler()" alt="Choose Language" height="45" width="45">
             <img class="languageIcon" src="images/help.png" onclick="help()" alt="Help, About and Data" height="45" width="45">
             <img class="languageIcon" src="images/legal.png" onclick="legal()" alt="Legal Notes" height="45" width="45">
         </div> 
-        //map
         <div id="map" class="map"></div> 
         <div id="info" class="info">&nbsp;</div>
         <div id="finfo" class="modal3"><br/>

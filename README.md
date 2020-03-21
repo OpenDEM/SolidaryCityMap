@@ -10,5 +10,7 @@ There is an editor version of the application which allows registered users to a
 
 [solidary.city](https://solidary.city)
 
+ATTENTION: For the automatic translations a Google API Key is required.
+
 Todos
 * Intregrate other datasets
